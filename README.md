@@ -1,6 +1,5 @@
 # About me
 
-<img src="file:///C:/Users/SANGJIN/Downloads/csharp.svg style=for-the-badge&logo=기술스택아이콘&logoColor=#239120">
 
 ![image](https://github.com/aainka/TestSunday/assets/29625147/1d131705-cdd6-423b-8f66-e18066f2630a)
 MUSIC https://github.com/aainka/TestSunday/blob/main/music.md
