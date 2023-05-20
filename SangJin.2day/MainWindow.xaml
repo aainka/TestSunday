@@ -1,0 +1,76 @@
+﻿<Window x:Class="그래픽_기초1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:그래픽_기초1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="50*">
+                <ColumnDefinition.BindingGroup>
+                    <BindingGroup/>
+                </ColumnDefinition.BindingGroup>
+            </ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.3*"/>
+            </Grid.RowDefinitions>
+            
+            <Border Grid.Row="1" Grid.Column="1" Background="Orange" SizeChanged="apple_SizeChanged"/>
+            <TextBlock Name="LoungeText" Text="휴게실" FontSize="50" Foreground="White" Background="Transparent" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
+            <Border Grid.Row="2" Grid.Column="2" Background="SaddleBrown" SizeChanged="Roit_SizeChanged"/>
+            <TextBlock Name="kkk" Text="화장실" FontSize="50" Foreground="White" Background="Transparent" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" />
+
+            <Border Grid.Row="0" Grid.Column="0" Background="Aqua">
+                <Button Name="rest" Content=" 식당 버튼"  FontSize="30" Foreground="Black" Width=" 200" Height=" 50"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"  Click="btnclick"/>
+            </Border>
+            
+           
+            
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="300"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="1" Grid.Column="1" Background="Khaki"/>
+            <TextBlock Text="사무실" FontSize="50" Background="Khaki" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"  />
+            
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*">
+                        <ColumnDefinition.BindingGroup>
+                            <BindingGroup/>
+                        </ColumnDefinition.BindingGroup>
+                    </ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="0" Grid.Column="0" Background="Magenta"/>
+                <TextBlock Text="창고" FontSize="50" Background="Transparent" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
+                <Border Grid.Row="0" Grid.Column="1" Background="Tan"/>
+                <TextBlock Text="회의실" FontSize="50" Background="Tan" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" />
+                
+                
+            </Grid>
+        </Grid>
+
+
+    </Grid>
+    
+
+</Window>
+
+    <!--crtl + k + c 주석 처리
+    crtl + k + u 주석 풀기-->
