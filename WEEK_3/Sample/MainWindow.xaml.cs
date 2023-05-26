@@ -76,7 +76,7 @@ namespace Week2
             {
                 Canvas.SetTop(Bee, 10);
             }
-            Debug.WriteLine("h = " + Garden.ActualHeight);
+           
         }
     }
 }
