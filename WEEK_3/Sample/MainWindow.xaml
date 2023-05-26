@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Week2"
+         xmlns:local="clr-namespace:Week2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Height="20" Width="100" Content="Push"/>
-    </Grid>
+        Title="TestSunday" Height="900" Width="900" Background="LightGreen" >
+    <Canvas x:Name="Green">
+        <Image  Canvas.Top="10" Canvas.Left="10" Source="/images/bee_house.png" Width="100"/>
+        <Image    x:Name="Bee" Canvas.Top="200" Canvas.Left="200" Source="/images/bee_worker.png" Width="50" Height="128" />
+    </Canvas>
 </Window>
