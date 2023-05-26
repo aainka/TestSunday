@@ -32,7 +32,7 @@ namespace Week2
 
             Bee.MouseDown += (s, e) =>
             {
-                Point p = e.GetPosition(Green);
+                Point p = e.GetPosition(Garden);
                 Image image = new Image();
                 image.Source = new BitmapImage(
                      new Uri("pack://application:,,,/images/honey.png"));
@@ -40,7 +40,7 @@ namespace Week2
                 image.Height = 50;
                 Canvas.SetTop(image, p.Y);
                 Canvas.SetLeft(image, p.X);
-                Green.Children.Add(image);
+                Garden.Children.Add(image);
                 
             };
         }
@@ -68,15 +68,15 @@ namespace Week2
             x = Canvas.GetLeft(Bee);
             y = Canvas.GetTop(Bee);
 
-            if (x < 0 || x > Green.ActualWidth)
+            if (x < 0 || x > Garden.ActualWidth)
             {
                 Canvas.SetLeft(Bee, 10);
             }
-            if (y < 0 || y > Green.ActualHeight)
+            if (y < 0 || y > Garden.ActualHeight)
             {
                 Canvas.SetTop(Bee, 10);
             }
-            Debug.WriteLine("h = " + Green.ActualHeight);
+            Debug.WriteLine("h = " + Garden.ActualHeight);
         }
     }
 }
