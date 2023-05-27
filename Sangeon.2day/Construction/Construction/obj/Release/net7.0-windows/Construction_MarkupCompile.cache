@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\SundayClassByJJY\TestSunday\Sangeon.2day\Construction\Construction\obj\Debug\net7.0-windows\
+C:\SundayClassByJJY\TestSunday\Sangeon.2day\Construction\Construction\obj\Release\net7.0-windows\
 Construction
 none
 false
-TRACE;DEBUG;NET;NET7_0;NETCOREAPP
+TRACE;RELEASE;NET;NET7_0;NETCOREAPP
 C:\SundayClassByJJY\TestSunday\Sangeon.2day\Construction\Construction\App.xaml
 11407045341
 
