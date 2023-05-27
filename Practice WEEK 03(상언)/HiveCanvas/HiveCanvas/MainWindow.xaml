@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:HiveCanvas"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Canvas x:Name="Garden">
+    <Canvas x:Name="Garden" Background="Blue">
+        <TextBlock Text="Welcome to Aquarium" FontSize="32" Foreground="Orange" Canvas.Top="32" Canvas.Left="0"/>
         <Image  Canvas.Top="167" Canvas.Left="264" Source="/images/bee_house.png" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"
                 MouseDown="Hive_MouseDown"/>
         <Image    x:Name="Bee" Canvas.Top="128" Canvas.Left="400" Source="/images/bee_worker.png" Width="62" Height="62" RenderTransformOrigin="0.5,0.5" 

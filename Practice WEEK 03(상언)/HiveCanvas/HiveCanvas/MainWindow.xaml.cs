@@ -111,7 +111,8 @@ namespace HiveCanvas
 
         private void Hive_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            new Bee(Garden, 10, 10, Random.Next() % 100 + 10);
+            Image img = sender as Image;
+            new Bee(Garden, Canvas.GetLeft(img), Canvas.GetTop(img), Random.Next(10) + 10);
         }
     }
 
@@ -120,11 +121,17 @@ namespace HiveCanvas
 
     }
 
+
+
     class Bee
     {
         Image image = new Image();
         DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
         private int speed = 10;
+        Canvas _canvas = null;
+        Random random = new Random();
+        private int width = 30;
+        private int height = 30;
 
         public Point pos {
             get
@@ -140,31 +147,56 @@ namespace HiveCanvas
                 Canvas.SetTop(image, value.Y);
             }
         }
-        
+       
 
         public Bee(Canvas canvas, double x, double y, int speed)
         {
             this.speed = speed;
+            this._canvas = canvas;
             pos = new Point(x,y);
             image.Source = new BitmapImage(
-                   new Uri(@"/Images/bee_worker.png", UriKind.RelativeOrAbsolute)
+                   new Uri(@"/Images/sunfish.png", UriKind.RelativeOrAbsolute)
                );
-            image.Width = 30;
-            image.Height = 30;
+            image.Width = width;
+            image.Height = height;
+            image.MouseDown += Bee_MouseDown;
             canvas.Children.Add(image);
             timer.Tick += timer_Tick;
-            timer.Interval = TimeSpan.FromMilliseconds(10);
+            timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Start();
         }
+        
         void timer_Tick(object sender, EventArgs e)
         {
             Move();
         }
 
+        private void Bee_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            timer.Stop();
+            _canvas.Children.Remove(image);
+        }
         public void Move()
         {
-            pos = new Point(pos.X + speed, pos.Y + speed);
-            Debug.WriteLine(" POS = " + pos);
+            switch (random.Next(4))
+            {
+                case 0:
+                    if (pos.X + speed <= _canvas.ActualWidth - width) { pos = new Point(pos.X + speed, pos.Y); }
+                    else { Move(); }
+                    break;
+                case 1:
+                    if (pos.X - speed >= 0) { pos = new Point(pos.X - speed, pos.Y); }
+                    else { Move(); }
+                    break;
+                case 2:
+                    if (pos.Y + speed <= _canvas.ActualHeight - height) { pos = new Point(pos.X , pos.Y + speed); }
+                    else { Move(); }
+                    break;
+                case 3:
+                    if (pos.Y - speed >= 0) { pos = new Point(pos.X, pos.Y - speed); }
+                    else { Move(); }
+                    break;
+            }
         }
     }
 }
