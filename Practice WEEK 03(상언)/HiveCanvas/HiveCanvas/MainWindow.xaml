@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:HiveCanvas"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Canvas x:Name="Garden">
+        <Image  Canvas.Top="167" Canvas.Left="264" Source="/images/bee_house.png" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Image    x:Name="Bee" Canvas.Top="160" Canvas.Left="369" Source="/images/bee_worker.png" Width="62" Height="114" RenderTransformOrigin="0.5,0.5" />
 
-    </Grid>
+    </Canvas>
 </Window>
