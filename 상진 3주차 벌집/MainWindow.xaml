@@ -1,0 +1,19 @@
+﻿<Window x:Class="csharp_3week.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:csharp_3week"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Canvas x:Name="Garden">
+        <Image x:Name="house" Canvas.Top="10" Canvas.Left="10" Source="/img/bee_house.png" Width="100"
+               MouseDown="Hive_MouseDown"/>
+        <Image x:Name="bee5" Canvas.Top="200" Canvas.Left="100" Source="/img/bee_worker.png" Width="30"
+               MouseRightButtonDown="beerightClick"  MouseLeftButtonDown="beeleftClick" />
+        <TextBox x:Name="beetext" Text="BeeKing" Canvas.Top="180" Canvas.Left="100" FontSize="10"/>
+
+
+
+    </Canvas>
+</Window>
