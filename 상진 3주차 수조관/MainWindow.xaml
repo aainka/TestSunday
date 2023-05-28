@@ -1,0 +1,17 @@
+﻿<Window x:Class="Aquarium_3_week.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Aquarium_3_week"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Canvas x:Name="aquarium" Background="Transparent" SizeChanged="Canvas_size_changed">
+        <Image x:Name="Back" Source="fishimg/kkk.jpg" Canvas.Top="-20" Canvas.Left="0" Width="800" />
+        <TextBlock x:Name="FishAdd" Text="물고기 추가" FontSize="20" Background="gray" Foreground="white"
+                  MouseDown="FishAdd_Click"/>
+        <TextBlock x:Name="FishHpPlus" Text="물고기 체력 추가" FontSize="20" Background="gray" Foreground="white"
+                   Canvas.Bottom="0" Canvas.Right="0" MouseDown="FishHpPlus_Click"/>
+    </Canvas>
+</Window>
