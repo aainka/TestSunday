@@ -33,183 +33,103 @@ namespace HiveCanvas
         public MainWindow()
         {
             InitializeComponent();
-            //Image image = new Image();
-
-            //image.Source = new BitmapImage(
-            //        new Uri(@"/Images/bee_worker.png", UriKind.RelativeOrAbsolute)
-            //    );
-
-           // Garden.Children.Add(image);
-
-            timer.Tick += timer_Tick;
-            timer.Interval = TimeSpan.FromMilliseconds(10);
-            timer.Start();
+            new SharkCreator(Aquarium);
         }
-        void timer_Tick(object sender, EventArgs e)
+        
+
+        
+
+        //void Move()
+        //{
+        //    int randNum = Random.Next();
+        //    int step = (randNum % 10) + 5;
+        //    var x = Canvas.GetLeft(Bee);
+        //    var y = Canvas.GetTop(Bee);
+        //    switch (randNum % 4)
+        //    {
+        //        case 0:
+        //            if (x + step <= Aquarium.ActualWidth - Bee.Width) { Canvas.SetLeft(Bee, x + step); }
+        //            else { Move(); }
+        //            break;
+        //        case 1:
+        //            if (x - step >= 0) { Canvas.SetLeft(Bee, x - step); }
+        //            else { Move(); }
+        //            break;
+        //        case 2:
+        //            if (y + step <= Aquarium.ActualHeight - Bee.Height) { Canvas.SetTop(Bee, y + step); }
+        //            else { Move(); }
+        //            break;
+        //        case 3:
+        //            if (y - step >= 0) { Canvas.SetTop(Bee, y - step); }
+        //            else { Move(); }
+        //            break;
+        //    }
+        
+
+
+
+       
+ 
+
+        private void UCave_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //  Move();
-           // new Bee(Garden, 10, 10, Random.Next() % 100 + 10);
-        }
-
-        private void Bee_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-         //   ChangeSize();
-        }
-
-        void Move()
-        {
-            int randNum = Random.Next();
-            int step = (randNum % 10) + 5;
-            var x = Canvas.GetLeft(Bee);
-            var y = Canvas.GetTop(Bee);
-            switch (randNum % 4)
-            {
-                case 0:
-                    if (x + step <= Garden.ActualWidth - Bee.Width) { Canvas.SetLeft(Bee, x + step); }
-                    else { Move(); }
-                    break;
-                case 1:
-                    if (x - step >= 0) { Canvas.SetLeft(Bee, x - step); }
-                    else { Move(); }
-                    break;
-                case 2:
-                    if (y + step <= Garden.ActualHeight - Bee.Height) { Canvas.SetTop(Bee, y + step); }
-                    else { Move(); }
-                    break;
-                case 3:
-                    if (y - step >= 0) { Canvas.SetTop(Bee, y - step); }
-                    else { Move(); }
-                    break;
-            }
-        }
-
-
-
-        void ChangeSize()
-        {
-            int randNum = Random.Next();
-            if (Bee.Width <= 50) { Enlarge(); }
-            else
-            {
-                switch (randNum % 2)
-                {
-                    case 0:
-                        Enlarge(); break;
-                    case 1:
-                        Smallen(); break;
-                }
-            }
-
-        }
-
-        void Enlarge()
-        {
-            Bee.Width += 50;
-        }
-
-        void Smallen()
-        {
-            Bee.Width -= 50;
-        }
-
-        private void Hive_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Image img = sender as Image;
-            new Prey(Garden, Canvas.GetLeft(img), Canvas.GetTop(img), Random.Next(25) + 10);
+            new Anchovy("anchovy.png", Aquarium);
+            //Image img = sender as Image;
+            //new Prey(Aquarium, Canvas.GetLeft(img), Canvas.GetTop(img), Random.Next(25) + 10);
         }
     }
 
-    class House
-    {
-
-    }
 
 
     class FishXX
     {
-        int speed = 10;
-        Canvas _canvas = null;
+      //  int speed = 10;
+      //  Canvas _canvas = null;
 
 
-        public FishXX(Canvas canvas, double x, double y, int speed)
-        {
-            this.speed = speed;
-            this._canvas = canvas;
-            pos = new Point(x, y);
-            image.Source = new BitmapImage(
-                   new Uri(@"/Images/bee_worker.png", UriKind.RelativeOrAbsolute)
-               );
-            image.Width = width;
-            image.Height = height;
-            image.MouseDown += Bee_MouseDown;
-            canvas.Children.Add(image);
-            timer.Tick += timer_Tick;
-            timer.Interval = TimeSpan.FromMilliseconds(1);
-            timer.Start();
-        }
+        //public FishXX(Canvas canvas, double x, double y, int speed)
+        //{
+        //    this.speed = speed;
+        //    this._canvas = canvas;
+        //    pos = new Point(x, y);
+        //    image.Source = new BitmapImage(
+        //           new Uri(@"/Images/bee_worker.png", UriKind.RelativeOrAbsolute)
+        //       );
+        //    image.Width = width;
+        //    image.Height = height;
+        //    image.MouseDown += Bee_MouseDown;
+        //    canvas.Children.Add(image);
+        //    timer.Tick += timer_Tick;
+        //    timer.Interval = TimeSpan.FromMilliseconds(1);
+        //    timer.Start();
+        //}
 
-        public void Move()
-        {
-            switch (random.Next(4))
-            {
-                case 0:
-                    if (pos.X + speed <= _canvas.ActualWidth - width) { pos = new Point(pos.X + speed, pos.Y); }
-                    else { Move(); }
-                    break;
-                case 1:
-                    if (pos.X - speed >= 0) { pos = new Point(pos.X - speed, pos.Y); }
-                    else { Move(); }
-                    break;
-                case 2:
-                    if (pos.Y + speed <= _canvas.ActualHeight - height) { pos = new Point(pos.X, pos.Y + speed); }
-                    else { Move(); }
-                    break;
-                case 3:
-                    if (pos.Y - speed >= 0) { pos = new Point(pos.X, pos.Y - speed); }
-                    else { Move(); }
-                    break;
-            }
-        }
+        //public void Move()
+        //{
+        //    switch (random.Next(4))
+        //    {
+        //        case 0:
+        //            if (pos.X + speed <= _canvas.ActualWidth - width) { pos = new Point(pos.X + speed, pos.Y); }
+        //            else { Move(); }
+        //            break;
+        //        case 1:
+        //            if (pos.X - speed >= 0) { pos = new Point(pos.X - speed, pos.Y); }
+        //            else { Move(); }
+        //            break;
+        //        case 2:
+        //            if (pos.Y + speed <= _canvas.ActualHeight - height) { pos = new Point(pos.X, pos.Y + speed); }
+        //            else { Move(); }
+        //            break;
+        //        case 3:
+        //            if (pos.Y - speed >= 0) { pos = new Point(pos.X, pos.Y - speed); }
+        //            else { Move(); }
+        //            break;
+        //    }
+        //}
 
         void timer_Tick(object sender, EventArgs e)
         {
-            Move();
+         //   Move();
         }
-    }
-
-    class Predator
-    {
-        public Predator()
-        {
-
-        }
-    }
-
-
-    class PreyXX
-    {
-      
-        private int speed = 10;
-        Canvas _canvas = null;
-        Random random = new Random();
-        private int width = 30;
-        private int height = 30;
-
-        
-       
-
-        public Prey(Canvas canvas, double x, double y, int speed)
-        {
-            
-        }
-        
-        
-
-        private void Bee_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            timer.Stop();
-            _canvas.Children.Remove(image);
-        }
-        
     }
 }

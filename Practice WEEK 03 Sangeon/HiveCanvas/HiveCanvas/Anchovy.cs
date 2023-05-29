@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace HiveCanvas
 {
@@ -10,15 +11,16 @@ namespace HiveCanvas
     {
         static public List<Anchovy> listAnchovy = new List<Anchovy>();
 
-        public Anchovy(string ImgName) : base(ImgName)
+        public Anchovy(string ImgName, Canvas canvas) : base(ImgName, canvas)
         {
             listAnchovy.Add(this);
         }
 
         public override void TimerMove(object sender, EventArgs e)
         {
-            
 
+            X += 50;
+            Y+= 50; 
             //double mdis = 100000;
             //Shark mshark = null;
             //foreach( Shark othershark in listShark )

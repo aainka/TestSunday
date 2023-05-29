@@ -13,7 +13,7 @@ namespace HiveCanvas
 {
     public abstract class Fish
     {
-
+        Canvas _canvas;
         Image image = new Image();
         DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
         public Point pos
@@ -40,7 +40,7 @@ namespace HiveCanvas
             }
             set
             {
-                Canvas.SetLeft(image, X);
+                Canvas.SetLeft(image, value);
             }
         }
         public double Y
@@ -51,16 +51,17 @@ namespace HiveCanvas
             }
             set
             {
-                Canvas.SetTop(image, Y);
+                Canvas.SetTop(image, value);
             }
         }
 
         abstract public void TimerMove(object sender, EventArgs e);
 
-        public Fish(string imgName)
+        public Fish(string imgName,Canvas canvas )
         {
+            _canvas = canvas;
             loadImage(imgName);
-            timer.Tick += TimerMove;
+            timer.Tick += TimerMove;    
             timer.Interval = TimeSpan.FromMilliseconds(1);
             timer.Start();
         }
@@ -75,14 +76,17 @@ namespace HiveCanvas
             image.Source = new BitmapImage(
                  new Uri(@"/Images/"+png, UriKind.RelativeOrAbsolute)
              );
-            image.Width = 30;
-            image.Height = 30;
+            image.Width = 100;
+            image.Height = 70;
+            _canvas.Children.Add(image);
+            X = 50;
+            Y = 50;
         }
 
         public void Dispose()
         {
             timer.Stop();
-            _canvas.Children.remove(image);
+            _canvas.Children.Remove(image);
         }
         
     }
