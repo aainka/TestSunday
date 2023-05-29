@@ -112,7 +112,7 @@ namespace HiveCanvas
         private void Hive_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Image img = sender as Image;
-            new Bee(Garden, Canvas.GetLeft(img), Canvas.GetTop(img), Random.Next(10) + 10);
+            new Prey(Garden, Canvas.GetLeft(img), Canvas.GetTop(img), Random.Next(25) + 10);
         }
     }
 
@@ -123,7 +123,7 @@ namespace HiveCanvas
 
 
 
-    class Bee
+    class Prey
     {
         Image image = new Image();
         DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
@@ -149,20 +149,20 @@ namespace HiveCanvas
         }
        
 
-        public Bee(Canvas canvas, double x, double y, int speed)
+        public Prey(Canvas canvas, double x, double y, int speed)
         {
             this.speed = speed;
             this._canvas = canvas;
             pos = new Point(x,y);
             image.Source = new BitmapImage(
-                   new Uri(@"/Images/sunfish.png", UriKind.RelativeOrAbsolute)
+                   new Uri(@"/Images/bee_worker.png", UriKind.RelativeOrAbsolute)
                );
             image.Width = width;
             image.Height = height;
             image.MouseDown += Bee_MouseDown;
             canvas.Children.Add(image);
             timer.Tick += timer_Tick;
-            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Interval = TimeSpan.FromMilliseconds(1);
             timer.Start();
         }
         
