@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,12 +31,12 @@ namespace Aquarium
                 double tempDist = 0;
                 foreach (Fish tempfish in fishlist)
                 {
-                    tempDist = Sqrt(Pow(position.X - tempfish.position.X, 2) + Pow(position.Y - tempfish.position.Y, 2));
-                    if (tempDist < dist) { dist = tempDist; fish = tempfish; }
+                    tempDist = Point.Subtract(tempfish.position, position).Length;
+                    if (tempDist < dist) { dist=tempDist; fish = tempfish; }
                 }
                 minFish = fish; minDist = dist;
             }
-            else { minFish = null; minDist = 0; }
+            else { minFish = null; minDist=Double.MinValue; }
             
         }
 

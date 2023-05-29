@@ -23,11 +23,12 @@
 
         <Image  Source="/images/cave.png" 
                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                Width="221" Height="130" Stretch="UniformToFill"
+                Width="221" Height="130" 
                 Grid.Column="1" Grid.Row="1"/>
 
         <Canvas x:Name="Aquarium" Background="Transparent">
             <TextBlock Text="Welcome to Aquarium" FontSize="32" Foreground="Orange" Canvas.Top="32" Canvas.Left="0"/>
+
         </Canvas>
 
     </Grid>

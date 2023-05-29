@@ -9,13 +9,14 @@ namespace Aquarium
 {
     class Shark : Fish
     {
-        public static List<Shark> SharkList = new List<Shark>();
+        public static FishSchool SharkSchool=new FishSchool();
+
         public Shark(string imgName, Canvas canvas) : base(imgName, canvas)
         {
-            AnchovyList.Add(this);
+            SharkSchool.Add(this);
         }
 
-        public override Fish FishInMyBusiness(List<Fish> fishlist)
+        public override void NormalMove()
         {
             throw new NotImplementedException();
         }

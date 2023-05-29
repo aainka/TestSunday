@@ -80,11 +80,11 @@ namespace Aquarium
             Fish preyFishInBusiness = null; double distPreyFishInBusiness = double.MaxValue;
             PreyFishList.NearestFish(position, out preyFishInBusiness, out distPreyFishInBusiness);
 
-            Fish predatorFishInBusiness = null; Vector distPredatorFishInBusiness = new Vector(double.MaxValue, 0);
+            Fish predatorFishInBusiness = null; double distPredatorFishInBusiness = double.MaxValue;
             PredatorFishList.NearestFish(position, out predatorFishInBusiness, out distPredatorFishInBusiness);
 
-            if (distPredatorFishInBusiness.Length <= distPreyFishInBusiness.Length) { ChasingMove(); }
-            else { ChasedMove(); }
+            if (distPredatorFishInBusiness <= distPreyFishInBusiness) { ChasedMove(predatorFishInBusiness); }
+            else { ChasedMove(preyFishInBusiness); }
         }
 
         public void ChasingMove(Fish targetFish)

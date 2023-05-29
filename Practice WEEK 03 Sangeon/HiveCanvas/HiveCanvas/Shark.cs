@@ -21,6 +21,11 @@ namespace HiveCanvas
             X += 50;
             Y+= 50; 
 
+            if ( X > )
+            {
+                this.Dispose();
+            }
+
             //double mdis = 100000;
             //Shark mshark = null;
             //foreach( Shark othershark in listShark )
