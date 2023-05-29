@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,9 +13,11 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HiveCanvas
 {
@@ -122,38 +125,17 @@ namespace HiveCanvas
     }
 
 
-
-    class Prey
+    class FishXX
     {
-        Image image = new Image();
-        DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
-        private int speed = 10;
+        int speed = 10;
         Canvas _canvas = null;
-        Random random = new Random();
-        private int width = 30;
-        private int height = 30;
 
-        public Point pos {
-            get
-            {
-                return new Point(
-                    Canvas.GetLeft(image),
-                    Canvas.GetTop(image)
-                );
-            }
-            set
-            {
-                Canvas.SetLeft(image, value.X);
-                Canvas.SetTop(image, value.Y);
-            }
-        }
-       
 
-        public Prey(Canvas canvas, double x, double y, int speed)
+        public FishXX(Canvas canvas, double x, double y, int speed)
         {
             this.speed = speed;
             this._canvas = canvas;
-            pos = new Point(x,y);
+            pos = new Point(x, y);
             image.Source = new BitmapImage(
                    new Uri(@"/Images/bee_worker.png", UriKind.RelativeOrAbsolute)
                );
@@ -165,17 +147,7 @@ namespace HiveCanvas
             timer.Interval = TimeSpan.FromMilliseconds(1);
             timer.Start();
         }
-        
-        void timer_Tick(object sender, EventArgs e)
-        {
-            Move();
-        }
 
-        private void Bee_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            timer.Stop();
-            _canvas.Children.Remove(image);
-        }
         public void Move()
         {
             switch (random.Next(4))
@@ -189,7 +161,7 @@ namespace HiveCanvas
                     else { Move(); }
                     break;
                 case 2:
-                    if (pos.Y + speed <= _canvas.ActualHeight - height) { pos = new Point(pos.X , pos.Y + speed); }
+                    if (pos.Y + speed <= _canvas.ActualHeight - height) { pos = new Point(pos.X, pos.Y + speed); }
                     else { Move(); }
                     break;
                 case 3:
@@ -198,5 +170,46 @@ namespace HiveCanvas
                     break;
             }
         }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            Move();
+        }
+    }
+
+    class Predator
+    {
+        public Predator()
+        {
+
+        }
+    }
+
+
+    class PreyXX
+    {
+      
+        private int speed = 10;
+        Canvas _canvas = null;
+        Random random = new Random();
+        private int width = 30;
+        private int height = 30;
+
+        
+       
+
+        public Prey(Canvas canvas, double x, double y, int speed)
+        {
+            
+        }
+        
+        
+
+        private void Bee_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            timer.Stop();
+            _canvas.Children.Remove(image);
+        }
+        
     }
 }

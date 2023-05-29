@@ -8,14 +8,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\anchovy.png" />
+    <None Remove="images\anchovy_targeted.png" />
     <None Remove="images\bee_house.png" />
     <None Remove="images\bee_worker.png" />
     <None Remove="images\bee_worker2.png" />
+    <None Remove="images\cave.png" />
     <None Remove="images\honey.png" />
+    <None Remove="images\shark.png" />
+    <None Remove="images\shark_armed.png" />
     <None Remove="images\sunfish.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="images\anchovy_targeted.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\anchovy.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\bee_house.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -25,7 +39,16 @@
     <Resource Include="images\bee_worker2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="images\cave.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\honey.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\shark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\shark_armed.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="images\sunfish.png">

@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace HiveCanvas
 {
-    internal class Fish
+    public class FishGroup
     {
+        public List<Fish> listFish= new List<Fish>();
+
+        public FishGroup(List<Fish> listFish)
+        {
+
+        }
     }
 }
