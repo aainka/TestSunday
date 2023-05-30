@@ -14,13 +14,32 @@ namespace Aquarium
         public Cod(string imgName, Canvas canvas) : base(imgName, canvas)
         {
             CodSchool.Add(this);
+            //fishkind = FishKind.Cod;
         }
 
 
 
         public override void NormalMove()
         {
-            throw new NotImplementedException();
+            switch (dice.Next(4))
+            {
+                case 0:
+                    if (position.X + speed <= _canvas.ActualWidth - width) { position = new point(position.x + speed, position.y); }
+                    else { NormalMove(); }
+                    break;
+                case 1:
+                    if (position.X - speed >= 0) { position = new point(position.x - speed, position.y); }
+                    else { NormalMove(); }
+                    break;
+                case 2:
+                    if (position.Y + speed <= _canvas.ActualHeight - height) { position = new point(position.x, position.y + speed); }
+                    else { NormalMove(); }
+                    break;
+                case 3:
+                    if (position.Y - speed >= 0) { position = new point(position.x, position.y - speed); }
+                    else { NormalMove(); }
+                    break;
+            }
         }
 
         public override void TimerMove(object sender, EventArgs e)

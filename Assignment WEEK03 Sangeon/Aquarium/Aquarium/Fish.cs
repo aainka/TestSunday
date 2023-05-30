@@ -10,35 +10,71 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using static System.Math;
-
+using System.Security.Cryptography.X509Certificates;
+using System.Net.NetworkInformation;
 
 namespace Aquarium
 {
+    
+   
+
     public abstract class Fish
     {
-        Canvas? _canvas = null;
-        Image image = new Image();
+        public Canvas? _canvas = null;
+        public Image image = new Image();
+        public Random dice= new Random();
+        public static Vector stdVec = new Vector(0, 1); 
 
-        RotateTransform rotateTransform = new RotateTransform(0);
-        ScaleTransform scaleTransfrom= new ScaleTransform(1,1);
-        TransformGroup transformGroup= new TransformGroup();
+        //public enum FishKind
+        //{None, Shark, Cod }
 
-        //Why can't I append transfromGroup at the declaration section?
-        //transformGroup.Children.Add(scaleTransfrom);
-        //transformGroup.Children.Add(rotateTransform);
+        //public static Dictionary<FishKind, (int, int)> FishSize = new Dictionary<FishKind, (int, int)> 
+        //{
+        //    { FishKind.None, (0,0)},
+        //    { FishKind.Shark,(150, 100)},
+        //    { FishKind.Cod, (100, 100) }
+        //};
+
+        
 
         DispatcherTimer timer = new DispatcherTimer();
+
         List<FishSchool> PreyFishSchoolList=null; List<FishSchool> PredatorFishSchoolList = null;
         FishSchool PreyFishList = null; FishSchool PredatorFishList = null;
 
 
+        public double alertRadius;
+
+        public (double,double) size
+        {
+            get
+            {
+                return size;
+            }
+            set
+            {
+                image.Width = value.Item1; image.Height = value.Item2;
+                size = value;
+            }
+        }
+
+        private Fish preyFishInBusiness
+        {
+            get
+            {
+                return PreyFishList.NearestFish(position, out preyFishInBusiness, out distPreyFishInBusiness);
+            }
+        }
+
+
+        //About Movement-------------------------------------------
         public Point position
         {
             get
             {
                 return new Point(
-                    (int)(Canvas.GetLeft(image)+image.Width/2),
-                    (int)(Canvas.GetTop(image)+image.Height/2)
+                    (int)(Canvas.GetLeft(image) + image.Width / 2),
+                    (int)(Canvas.GetTop(image) + image.Height / 2)
                 );
             }
             set
@@ -48,63 +84,68 @@ namespace Aquarium
             }
         }
 
-        public double angle
+        private double angle;
+        private double speed;
+
+        //Image Rotation
+        private RotateTransform rotateTransform = new RotateTransform();
+        private ScaleTransform scaleTransfrom = new ScaleTransform();
+        private TransformGroup transformGroup = new TransformGroup();
+
+        public Vector dirVec
         {
             get
             {
-                return rotateTransform.Angle;
+                return dirVec;
             }
             set
             {
-                rotateTransform.Angle = value;
+                angle = Vector.AngleBetween(stdVec,value);
+                speed = value.Length;
+                rotateTransform = new RotateTransform(angle);
+                scaleTransfrom = new ScaleTransform(speed,speed);
+                dirVec = value;
             }
         }
 
-        public Fish(string imgName, double width, double height, Canvas canvas)
+        public Fish(string imgName, (double,double) size, Point position, Vector dirVector, Canvas canvas)
         {
             _canvas = canvas;
-            LoadImage(imgName, width, height);
+            image.Source = new BitmapImage(new Uri(@"/Images/" + imgName, UriKind.RelativeOrAbsolute));
+
+            this.size = size; this.position = position; this.dirVec = dirVec;
+
+            transformGroup.Children.Add(scaleTransfrom); transformGroup.Children.Add(rotateTransform);
+            image.LayoutTransform = transformGroup;
+
             timer.Tick += TimerMove;
             timer.Interval = TimeSpan.FromMilliseconds(1);
             timer.Start();
 
         }
 
-
-        abstract public void TimerMove(object sender, EventArgs e);
-
-        abstract public void NormalMove();
-        
-        public void ChasingOrChasedMove()
+        private void TimerMove(object sender, EventArgs e)
         {
-            Fish preyFishInBusiness = null; double distPreyFishInBusiness = double.MaxValue;
-            PreyFishList.NearestFish(position, out preyFishInBusiness, out distPreyFishInBusiness);
+            var (preyFishInBusiness, distPreyFishInBusiness)= PreyFishList.NearestFish(position);
+            var (predatorFishInBusiness, distPredatorFishInBusiness) = PredatorFishList.NearestFish(position);
 
-            Fish predatorFishInBusiness = null; double distPredatorFishInBusiness = double.MaxValue;
-            PredatorFishList.NearestFish(position, out predatorFishInBusiness, out distPredatorFishInBusiness);
+            if 
 
             if (distPredatorFishInBusiness <= distPreyFishInBusiness) { ChasedMove(predatorFishInBusiness); }
             else { ChasedMove(preyFishInBusiness); }
         }
 
-        public void ChasingMove(Fish targetFish)
+        abstract public void NormalMove();
+        
+        public void ChasingMove(Fish preyFish)
+        {
+               
+        }
+
+        public void ChasedMove(Fish predatorFish)
         {
 
         }
 
-        public void ChasedMove(Fish targetFish)
-        {
-
-        }
-
-        public void LoadImage(string png, double width, double height)
-        {
-            image.Source = new BitmapImage(new Uri(@"/Images/" + png, UriKind.RelativeOrAbsolute));
-            image.Width = width; image.Height = height;
-            transformGroup.Children.Add(scaleTransfrom);
-            transformGroup.Children.Add(rotateTransform);
-            image.LayoutTransform = transformGroup;
-            _canvas.Children.Add(image);
-        }
     }
 }
