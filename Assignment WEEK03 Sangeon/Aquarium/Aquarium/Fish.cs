@@ -23,7 +23,7 @@ namespace Aquarium
         public Canvas? _canvas = null;
         public Image image = new Image();
         public Random dice= new Random();
-        public static Vector stdVec = new Vector(0, 1); 
+        public static Vector stdVector = new Vector(0, 1); 
 
         //public enum FishKind
         //{None, Shark, Cod }
@@ -39,11 +39,13 @@ namespace Aquarium
 
         DispatcherTimer timer = new DispatcherTimer();
 
-        List<FishSchool> PreyFishSchoolList=null; List<FishSchool> PredatorFishSchoolList = null;
-        FishSchool PreyFishList = null; FishSchool PredatorFishList = null;
+        public List<FishSchool> PreyFishSchoolList = null;
+        public List<FishSchool> PredatorFishSchoolList = null;
+        public FishSchool PreyFishList = null;
+        public FishSchool PredatorFishList = null;
 
 
-        public double alertRadius;
+        public double alertRadius; public double alertChasingSpeed; public double alertChasedSpeed;
 
         public (double,double) size
         {
@@ -58,62 +60,48 @@ namespace Aquarium
             }
         }
 
-        private Fish preyFishInBusiness
-        {
-            get
-            {
-                return PreyFishList.NearestFish(position, out preyFishInBusiness, out distPreyFishInBusiness);
-            }
-        }
-
 
         //About Movement-------------------------------------------
-        public Point position
-        {
-            get
-            {
-                return new Point(
-                    (int)(Canvas.GetLeft(image) + image.Width / 2),
-                    (int)(Canvas.GetTop(image) + image.Height / 2)
-                );
-            }
-            set
-            {
-                Canvas.SetLeft(image, value.X - image.Width / 2);
-                Canvas.SetTop(image, value.Y - image.Height / 2);
-            }
-        }
-
-        private double angle;
-        private double speed;
 
         //Image Rotation
         private RotateTransform rotateTransform = new RotateTransform();
         private ScaleTransform scaleTransfrom = new ScaleTransform();
         private TransformGroup transformGroup = new TransformGroup();
 
-        public Vector dirVec
+        public Point position
         {
             get
             {
-                return dirVec;
+                return position;
             }
             set
             {
-                angle = Vector.AngleBetween(stdVec,value);
-                speed = value.Length;
-                rotateTransform = new RotateTransform(angle);
-                scaleTransfrom = new ScaleTransform(speed,speed);
-                dirVec = value;
+                Canvas.SetLeft(image, value.X - image.Width / 2);
+                Canvas.SetTop(image, value.Y - image.Height / 2);
+                position = value;
             }
         }
 
-        public Fish(string imgName, (double,double) size, Point position, Vector dirVector, Canvas canvas)
+        public Vector dirVector
+        {
+            get
+            {
+                return dirVector;
+            }
+            set
+            {
+                rotateTransform = new RotateTransform(Vector.AngleBetween(stdVector, value));
+                scaleTransfrom = new ScaleTransform(1, 1);
+                dirVector = value;
+            }
+        }
+
+        public Fish(string imgName, Canvas canvas, (double,double) size, Point position, Vector dirVector)
         {
             _canvas = canvas;
             image.Source = new BitmapImage(new Uri(@"/Images/" + imgName, UriKind.RelativeOrAbsolute));
 
-            this.size = size; this.position = position; this.dirVec = dirVec;
+            this.size = size; this.position = position; this.dirVector = dirVector;
 
             transformGroup.Children.Add(scaleTransfrom); transformGroup.Children.Add(rotateTransform);
             image.LayoutTransform = transformGroup;
@@ -124,19 +112,26 @@ namespace Aquarium
 
         }
 
+
         private void TimerMove(object sender, EventArgs e)
         {
             var (preyFishInBusiness, distPreyFishInBusiness)= PreyFishList.NearestFish(position);
             var (predatorFishInBusiness, distPredatorFishInBusiness) = PredatorFishList.NearestFish(position);
 
-            if 
-
-            if (distPredatorFishInBusiness <= distPreyFishInBusiness) { ChasedMove(predatorFishInBusiness); }
-            else { ChasedMove(preyFishInBusiness); }
+            if (ContactWith(predatorFishInBusiness)) { Dispose(); }
+            if (Min(distPreyFishInBusiness, distPredatorFishInBusiness) > alertRadius) { NormalMove(); }
+            else
+            {
+                if (distPredatorFishInBusiness <= distPreyFishInBusiness) { ChasedMove(predatorFishInBusiness); }
+                else { ChasedMove(preyFishInBusiness); }
+            }
+            
+            position = Vector.Add(dirVector, position);
         }
 
         abstract public void NormalMove();
         
+
         public void ChasingMove(Fish preyFish)
         {
                
@@ -145,6 +140,21 @@ namespace Aquarium
         public void ChasedMove(Fish predatorFish)
         {
 
+        }
+
+        public bool ContactWith(Fish fishInBusiness)
+        {
+            Vector displacementVector = Point.Subtract(fishInBusiness.position, position);
+            if (displacementVector.X < (size.Item1 + fishInBusiness.size.Item1) / 2
+                && displacementVector.Y < (size.Item2 + fishInBusiness.size.Item2) / 2)
+            { return true; }
+            return false;
+        }
+
+        public void Dispose()
+        {
+            timer.Stop();
+            _canvas.Children.Remove(image);
         }
 
     }

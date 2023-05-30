@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows;
+using System.Windows.Media;
 
 namespace Aquarium
 {
@@ -11,9 +13,13 @@ namespace Aquarium
     class Cod : Fish
     {
         public static FishSchool CodSchool = new FishSchool();
-        public Cod(string imgName, Canvas canvas) : base(imgName, canvas)
+
+        public Cod(string imgName, Canvas canvas, (double, double) size, Point position, Vector dirVector) 
+            : base(imgName, canvas, size, position, dirVector)
         {
+            
             CodSchool.Add(this);
+            PredatorFishSchoolList.Add(Shark.SharkSchool);
             //fishkind = FishKind.Cod;
         }
 
@@ -21,30 +27,27 @@ namespace Aquarium
 
         public override void NormalMove()
         {
-            switch (dice.Next(4))
-            {
-                case 0:
-                    if (position.X + speed <= _canvas.ActualWidth - width) { position = new point(position.x + speed, position.y); }
-                    else { NormalMove(); }
-                    break;
-                case 1:
-                    if (position.X - speed >= 0) { position = new point(position.x - speed, position.y); }
-                    else { NormalMove(); }
-                    break;
-                case 2:
-                    if (position.Y + speed <= _canvas.ActualHeight - height) { position = new point(position.x, position.y + speed); }
-                    else { NormalMove(); }
-                    break;
-                case 3:
-                    if (position.Y - speed >= 0) { position = new point(position.x, position.y - speed); }
-                    else { NormalMove(); }
-                    break;
-            }
+            double angle=dice.NextDouble()*365;
+            double speed = dice.NextDouble() * 15 + 10;
+
+            Matrix tf = Matrix.Identity;tf.Rotate(angle);tf.Scale(speed, speed);
+            dirVector = tf.Transform(stdVector);
+
+            if (OutOfCanvas(Point.Add(position, dirVector))) { NormalMove(); }
         }
 
-        public override void TimerMove(object sender, EventArgs e)
+        private bool OutOfCanvas(Point position)
         {
-            throw new NotImplementedException();
+            if (
+                (position.X - size.Item1 / 2 < 0) //Out of Left
+                || (position.X + size.Item1 / 2 > _canvas.ActualWidth) //Out of Right
+                || (position.Y - size.Item2 / 2 < 0) //Out of Top
+                || (position.Y + size.Item2 / 2 > _canvas.ActualHeight)
+               ) { return true; }
+
+            return false;
         }
+
+
     }
 }

@@ -11,7 +11,7 @@ namespace Aquarium
     
     class FishSchool
     {
-        List<Fish> fishlist = null;
+        public List<Fish> fishlist = null;
 
         public FishSchool()
         {
@@ -23,20 +23,21 @@ namespace Aquarium
             this.fishlist = fishlist;
         }
 
-        public void NearestFish(Point position, out Fish minFish, out double minDist)
+        public (Fish?,double) NearestFish(Point position)
         {
             if (fishlist != null)
             {
+                Fish minFish = null; double minDist = double.MaxValue;
                 double dist = double.MaxValue; Fish fish = null;
                 double tempDist = 0;
                 foreach (Fish tempfish in fishlist)
                 {
                     tempDist = Point.Subtract(tempfish.position, position).Length;
-                    if (tempDist < dist) { dist=tempDist; fish = tempfish; }
+                    if (tempDist < dist) { dist = tempDist; fish = tempfish; }
                 }
-                minFish = fish; minDist = dist;
+                return (minFish, minDist);
             }
-            else { minFish = null; minDist=Double.MinValue; }
+            else { return (null, Double.MaxValue); }
             
         }
 

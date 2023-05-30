@@ -21,9 +21,6 @@ namespace Aquarium
             throw new NotImplementedException();
         }
 
-        public override void TimerMove(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
