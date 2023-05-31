@@ -87,9 +87,13 @@ namespace Aquarium
             }
             set
             {
+                double angle = Vector.AngleBetween(stdVector, value);
                 TransformGroup tfGroup = new TransformGroup();
-                RotateTransform rotateTf = new RotateTransform(Vector.AngleBetween(stdVector, value));
-                ScaleTransform scaleTf= new ScaleTransform(1, 1);
+                ScaleTransform scaleTf = new ScaleTransform(1, 1);
+                RotateTransform rotateTf = new RotateTransform(angle);
+                
+
+
                 tfGroup.Children.Add(scaleTf); tfGroup.Children.Add(rotateTf);
                 image.LayoutTransform = tfGroup;
                 dirVector = value;
