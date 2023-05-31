@@ -64,9 +64,6 @@ namespace Aquarium
         //About Movement-------------------------------------------
 
         //Image Rotation
-        private RotateTransform rotateTransform = new RotateTransform();
-        private ScaleTransform scaleTransfrom = new ScaleTransform();
-        private TransformGroup transformGroup = new TransformGroup();
 
         public Point position
         {
@@ -90,8 +87,11 @@ namespace Aquarium
             }
             set
             {
-                rotateTransform = new RotateTransform(Vector.AngleBetween(stdVector, value));
-                scaleTransfrom = new ScaleTransform(1, 1);
+                TransformGroup tfGroup = new TransformGroup();
+                RotateTransform rotateTf = new RotateTransform(Vector.AngleBetween(stdVector, value));
+                ScaleTransform scaleTf= new ScaleTransform(1, 1);
+                tfGroup.Children.Add(scaleTf); tfGroup.Children.Add(rotateTf);
+                image.LayoutTransform = tfGroup;
                 dirVector = value;
             }
         }
@@ -102,9 +102,6 @@ namespace Aquarium
             image.Source = new BitmapImage(new Uri(@"/Images/" + imgName, UriKind.RelativeOrAbsolute));
 
             this.size = size; this.position = position; this.dirVector = dirVector;
-
-            transformGroup.Children.Add(scaleTransfrom); transformGroup.Children.Add(rotateTransform);
-            image.LayoutTransform = transformGroup;
 
             timer.Tick += TimerMove;
             timer.Interval = TimeSpan.FromMilliseconds(1);
