@@ -15,49 +15,33 @@ using System.Net.NetworkInformation;
 
 namespace Aquarium
 {
-    
    
 
     public abstract class Fish
     {
         public Canvas? _canvas = null;
         public Image image = new Image();
+        public Image normalImage = new Image(); public Image chasingImage=new Image(); public Image chasedImage=new Image();
+        //Q. Can I redefine these attributes to static attribute in the child classes? 
         public Random dice= new Random();
         public static Vector stdVector = new Vector(0, 1); 
-
-        //public enum FishKind
-        //{None, Shark, Cod }
-
-        //public static Dictionary<FishKind, (int, int)> FishSize = new Dictionary<FishKind, (int, int)> 
-        //{
-        //    { FishKind.None, (0,0)},
-        //    { FishKind.Shark,(150, 100)},
-        //    { FishKind.Cod, (100, 100) }
-        //};
-
         
 
         DispatcherTimer timer = new DispatcherTimer();
 
-        public List<FishSchool> PreyFishSchoolList = null;
-        public List<FishSchool> PredatorFishSchoolList = null;
-        public FishSchool PreyFishList = null;
-        public FishSchool PredatorFishList = null;
+        public List<FishSchool> PreyFishSchoolList = new List<FishSchool>();
+        public List<FishSchool> PredatorFishSchoolList = new List<FishSchool>();
+        public FishSchool PreyFishList = new FishSchool();
+        public FishSchool PredatorFishList = new FishSchool();
 
 
         public double alertRadius; public double alertChasingSpeed; public double alertChasedSpeed;
 
-        public (double,double) size
+        private Size _size;
+        public Size size
         {
-            get
-            {
-                return size;
-            }
-            set
-            {
-                image.Width = value.Item1; image.Height = value.Item2;
-                size = value;
-            }
+            get {return _size;}
+            set {image.Width = value.Width; image.Height = value.Height; _size = value; }
         }
 
 
@@ -65,47 +49,46 @@ namespace Aquarium
 
         //Image Rotation
 
+        private Point _position;
         public Point position
         {
             get
             {
-                return position;
+                return _position;
             }
             set
             {
                 Canvas.SetLeft(image, value.X - image.Width / 2);
                 Canvas.SetTop(image, value.Y - image.Height / 2);
-                position = value;
+                _position = value;
             }
         }
 
+        private Vector _dirVector;
         public Vector dirVector
         {
             get
             {
-                return dirVector;
+                return _dirVector;
             }
             set
             {
                 double angle = Vector.AngleBetween(stdVector, value);
                 TransformGroup tfGroup = new TransformGroup();
-                ScaleTransform scaleTf = new ScaleTransform(1, 1);
+                ScaleTransform scaleTf = (angle>0)? new ScaleTransform(1, 1):new ScaleTransform(-1,1);
                 RotateTransform rotateTf = new RotateTransform(angle);
-                
-
-
                 tfGroup.Children.Add(scaleTf); tfGroup.Children.Add(rotateTf);
                 image.LayoutTransform = tfGroup;
-                dirVector = value;
+                _dirVector = value;
             }
         }
 
-        public Fish(string imgName, Canvas canvas, (double,double) size, Point position, Vector dirVector)
+        public Fish(string imgName, Canvas canvas, Point position, Vector dirVector)
         {
             _canvas = canvas;
             image.Source = new BitmapImage(new Uri(@"/Images/" + imgName, UriKind.RelativeOrAbsolute));
 
-            this.size = size; this.position = position; this.dirVector = dirVector;
+            this.position = position; this.dirVector = dirVector;
 
             timer.Tick += TimerMove;
             timer.Interval = TimeSpan.FromMilliseconds(1);
@@ -143,11 +126,11 @@ namespace Aquarium
 
         }
 
-        public bool ContactWith(Fish fishInBusiness)
+        public bool ContactWith(Fish otherFIsh)//Should be modified considering the rotation
         {
-            Vector displacementVector = Point.Subtract(fishInBusiness.position, position);
-            if (displacementVector.X < (size.Item1 + fishInBusiness.size.Item1) / 2
-                && displacementVector.Y < (size.Item2 + fishInBusiness.size.Item2) / 2)
+            Vector displacementVector = Point.Subtract(otherFIsh.position, position);
+            if (displacementVector.X < (size.Width + otherFIsh.size.Width) / 2
+                && displacementVector.Y < (size.Height + otherFIsh.size.Height) / 2)
             { return true; }
             return false;
         }

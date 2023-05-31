@@ -29,7 +29,8 @@ namespace Aquarium
 
         private void Cave_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            Point cave_position = new Point(Aquarium.ActualWidth/2+110, Aquarium.ActualHeight*9/10-20);
+            new Cod("cod.png",Aquarium, cave_position, Fish.stdVector);
         }
     }
 }

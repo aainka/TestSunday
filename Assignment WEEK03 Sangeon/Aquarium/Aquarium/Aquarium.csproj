@@ -12,15 +12,21 @@
     <None Remove="images\anchovy_targeted.png" />
     <None Remove="images\background.png" />
     <None Remove="images\cave.png" />
+    <None Remove="images\cod.png" />
+    <None Remove="images\cod_targeted.png" />
     <None Remove="images\shark.png" />
     <None Remove="images\shark_armed.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="images\anchovy.png" />
-    <Resource Include="images\anchovy_targeted.png" />
     <Resource Include="images\background.png" />
     <Resource Include="images\cave.png" />
+    <Resource Include="images\cod.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\cod_targeted.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\shark.png" />
     <Resource Include="images\shark_armed.png" />
   </ItemGroup>

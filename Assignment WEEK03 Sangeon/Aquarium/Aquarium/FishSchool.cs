@@ -8,10 +8,10 @@ using static System.Math;
 
 namespace Aquarium
 {
-    
-    class FishSchool
+
+    public class FishSchool
     {
-        public List<Fish> fishlist = null;
+        public List<Fish> fishlist = new List<Fish>();
 
         public FishSchool()
         {
@@ -23,7 +23,7 @@ namespace Aquarium
             this.fishlist = fishlist;
         }
 
-        public (Fish?,double) NearestFish(Point position)
+        public (Fish?, double) NearestFish(Point position)
         {
             if (fishlist != null)
             {
@@ -38,7 +38,7 @@ namespace Aquarium
                 return (minFish, minDist);
             }
             else { return (null, Double.MaxValue); }
-            
+
         }
 
         public void Add(Fish fish)
@@ -64,4 +64,5 @@ namespace Aquarium
         //    fishschool2.fishlist.ForEach(fish => fishschool1.fishlist.Add(fish));
         //    return fishschool1;
         //}
+    }
 }
