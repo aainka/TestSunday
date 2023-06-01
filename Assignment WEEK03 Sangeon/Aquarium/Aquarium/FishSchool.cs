@@ -8,7 +8,6 @@ using static System.Math;
 
 namespace Aquarium
 {
-
     public class FishSchool
     {
         public List<Fish> fishlist = new List<Fish>();

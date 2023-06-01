@@ -20,7 +20,9 @@ namespace Aquarium
     {
 
         public MainWindow()
-        { InitializeComponent(); }
+        { 
+            InitializeComponent();
+        }
 
         private void Cave_MouseDown(object sender, MouseButtonEventArgs e)
         {

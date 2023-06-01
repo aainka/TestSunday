@@ -16,11 +16,9 @@ using System.Diagnostics;
 
 namespace Aquarium
 {
-   
-
-    public abstract class Fish
+    abstract public class Fish
     {
-        public Canvas? canvas;
+        protected Canvas _canvas;
         
         public Image image = new Image();
         public BitmapImage normalImage=new BitmapImage();
@@ -34,10 +32,10 @@ namespace Aquarium
 
         protected DispatcherTimer timer = new DispatcherTimer();
 
-        public List<FishSchool> PreyFishSchoolList = new List<FishSchool>();
-        public List<FishSchool> PredatorFishSchoolList = new List<FishSchool>();
-        public FishSchool PreyFishList = new FishSchool();
-        public FishSchool PredatorFishList = new FishSchool();
+        protected List<FishSchool> PreyFishSchoolList = new List<FishSchool>();
+        protected List<FishSchool> PredatorFishSchoolList = new List<FishSchool>();
+        protected FishSchool PreyFishSchool = new FishSchool();
+        protected FishSchool PredatorFishSchool = new FishSchool();
 
 
         public double alertRadius;
@@ -92,10 +90,9 @@ namespace Aquarium
             }
         }
 
-        public double angle
+        protected double angle
         {get {return Vector.AngleBetween(stdVector, dirVector); }}
-
-        public double speed
+        protected double speed
         {get { return dirVector.Length; }}
 
 
@@ -103,33 +100,31 @@ namespace Aquarium
         //BIRTH AND DEATH
         public Fish(Canvas canvas, Point position, Vector dirVector)
         {
-            this.canvas = canvas;this.position = position; this.dirVector = dirVector;
+            _canvas = canvas;this.position = position; this.dirVector = dirVector;
 
             timer.Tick += TimerMove; timer.Interval = TimeSpan.FromMilliseconds(10);
         }
-
         protected void LoadImage(string name)
         {
             normalImage = new BitmapImage(new Uri(@"/Images/" + name + "_normal.png", UriKind.RelativeOrAbsolute));
             chasedImage = new BitmapImage(new Uri(@"/Images/" + name + "_chased.png", UriKind.RelativeOrAbsolute));
             chasingImage = new BitmapImage(new Uri(@"/Images/" + name + "_chasing.png", UriKind.RelativeOrAbsolute));
             image.Source = normalImage;
-            canvas.Children.Add(image);
+            _canvas.Children.Add(image);
         }
-
         public void Dispose()
         {
             timer.Stop();
-            canvas.Children.Remove(image);
+            _canvas.Children.Remove(image);
         }
 
-
-
         //MOVE
-        private void TimerMove(object sender, EventArgs e)
+        private void TimerMove(object? sender, EventArgs e)
         {
-            var (preyFishInBusiness, distPreyFishInBusiness)= PreyFishList.NearestFish(position);
-            var (predatorFishInBusiness, distPredatorFishInBusiness) = PredatorFishList.NearestFish(position);
+            UpdateFishListGeneral();UpdateFishListSpecific();
+
+            var (preyFishInBusiness, distPreyFishInBusiness)= PreyFishSchool.NearestFish(position);
+            var (predatorFishInBusiness, distPredatorFishInBusiness) = PredatorFishSchool.NearestFish(position);
 
             if (predatorFishInBusiness!=null && ContactWith(predatorFishInBusiness)) { Dispose(); }
             if (Min(distPreyFishInBusiness, distPredatorFishInBusiness) > alertRadius) { NormalMove(); }
@@ -142,9 +137,8 @@ namespace Aquarium
             position = Vector.Add(dirVector, position);
         }
 
-        abstract public void NormalMove();
-
-        public void ChasingMove(Fish preyFishInBusiness)
+        abstract protected void NormalMove();
+        private void ChasingMove(Fish preyFishInBusiness)
         {
             if (preyFishInBusiness == null) { return; }
 
@@ -154,8 +148,7 @@ namespace Aquarium
             displacementVector.Normalize();
             dirVector=Vector.Multiply(-Min(50,ChasingSpeed/distance), displacementVector);
         }
-
-        public void ChasedMove(Fish predatorFishInBusiness)
+        private void ChasedMove(Fish predatorFishInBusiness)
         {
             if (predatorFishInBusiness == null) { return; }
 
@@ -166,6 +159,38 @@ namespace Aquarium
             dirVector=Vector.Multiply(ChasedSpeed,displacementVector);
         }
 
+        //PREY & PREDATOR UPDATE
+        private void UpdateFishListGeneral()
+        {
+            UpdatePreyFishListGeneral();UpdatePredatorFishListGeneral();
+        }
+        private void UpdatePreyFishListGeneral()
+        {
+            foreach (FishSchool fishSchool in PreyFishSchoolList)
+            {
+                foreach (Fish preyFish in fishSchool.fishlist)
+                {
+                    PreyFishSchool.Add(preyFish);
+                }
+            }
+        }
+        private void UpdatePredatorFishListGeneral()
+        {
+            foreach (FishSchool fishSchool in PredatorFishSchoolList)
+            {
+                foreach (Fish predatorFish in fishSchool.fishlist)
+                {
+                    PredatorFishSchool.Add(predatorFish);
+                }
+            }
+        }
+
+        private void UpdateFishListSpecific()
+        {
+            UpdatePreyFishListSpecific(); UpdatePredatorFishListSpecific();
+        }
+        abstract protected void UpdatePreyFishListSpecific();
+        abstract protected void UpdatePredatorFishListSpecific();
 
         //TOOL
         public bool ContactWith(Fish otherFIsh)//Should be modified considering the rotation
@@ -177,6 +202,29 @@ namespace Aquarium
                 && displacementVector.Y < (size.Height + otherFIsh.size.Height) / 2)
             { return true; }
             else {  return false; }
+        }
+        public bool OutOfCanvasPartial()
+        {
+
+            if (
+                (position.X - size.Width / 2 < 0) //Out of Left
+                || (position.X + size.Width / 2 > _canvas.ActualWidth) //Out of Right
+                || (position.Y - size.Height / 2 < 0) //Out of Top
+                || (position.Y + size.Height / 2 > _canvas.ActualHeight)//Out of Bottom
+               ) { return true; }
+
+            return false;
+        }
+        public bool OutOfCanvasEntirely()
+        {
+            if (
+                (position.X + size.Width / 2 < 0) //Out of Left
+                || (position.X - size.Width / 2 > _canvas.ActualWidth) //Out of Right
+                || (position.Y + size.Height / 2 < 0) //Out of Top
+                || (position.Y - size.Height / 2 > _canvas.ActualHeight)//Out of Bottom
+               ) { return true; }
+
+            return false;
         }
     }
 }

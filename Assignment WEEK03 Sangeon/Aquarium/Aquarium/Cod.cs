@@ -31,8 +31,7 @@ namespace Aquarium
             timer.Start();
         }
 
-
-        public override void NormalMove()
+        protected override void NormalMove()
         {
             double nextAngle=angle+ dice.NextDouble()*10-5;
             double nextSpeed = normalSpeed + dice.NextDouble() * 3-1.5;
@@ -40,22 +39,11 @@ namespace Aquarium
             Matrix tf = Matrix.Identity; tf.Scale(nextSpeed, nextSpeed); tf.Rotate(nextAngle);
             dirVector = tf.Transform(stdVector);
 
-            if (OutOfCanvas(Point.Add(position, dirVector))) { dirVector = -dirVector; }
+            if (OutOfCanvasPartial()) { dirVector = -dirVector; }
         }
 
-        private bool OutOfCanvas(Point position)
-        {
-
-            if (
-                (position.X - size.Width / 2 < 0) //Out of Left
-                || (position.X + size.Width / 2 > canvas.ActualWidth) //Out of Right
-                || (position.Y - size.Height / 2 < 0) //Out of Top
-                || (position.Y + size.Height / 2 > canvas.ActualHeight)//Out of Bottom
-               ) { return true; }
-
-            return false;
-        }
-
+        protected override void UpdatePreyFishListSpecific() {; }
+        protected override void UpdatePredatorFishListSpecific() {; }
 
     }
 }
