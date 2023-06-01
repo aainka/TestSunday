@@ -5,35 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Aquarium"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="675" Width="1200">
     <Window.Background>
         <ImageBrush ImageSource="/images/background.png"></ImageBrush>
     </Window.Background>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="13*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
 
-        <Image  Source="/images/cave.png" 
-                HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                Width="220" Height="130" 
-                Grid.Column="1" Grid.Row="1"
-                MouseDown="Cave_MouseDown"/>
-
-        <Canvas x:Name="Aquarium" Background="Transparent">
-            <TextBlock Text="Welcome to Aquarium" 
+    <Canvas x:Name="Aquarium" Background="Transparent" SizeChanged="AquariumSizeChanged">
+        <TextBlock Text="Welcome to Aquarium" 
                        FontSize="32" Foreground="Orange" 
                        Canvas.Top="32" Canvas.Left="0"/>
+        <Image  x:Name="Cave" Source="/images/cave.png" 
+                Width="300" Height="200" Stretch="Uniform"
+                Canvas.Left="60" Canvas.Bottom="135"
+                HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                MouseDown="Cave_MouseDown"  />
+    </Canvas>
 
-        </Canvas>
-
-    </Grid>
-    
 </Window>

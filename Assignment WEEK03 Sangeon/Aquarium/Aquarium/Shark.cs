@@ -14,8 +14,8 @@ namespace Aquarium
 
         public static new Size size = new Size();
 
-        public Shark(string imgName, Canvas canvas, Point position, Vector dirVector)
-            : base(imgName, canvas, position, dirVector)
+        public Shark(Canvas canvas, Point position, Vector dirVector)
+            : base(canvas, position, dirVector)
         {
             SharkSchool.Add(this);
             PreyFishSchoolList.Add(Cod.CodSchool);

@@ -25,20 +25,17 @@ namespace Aquarium
 
         public (Fish?, double) NearestFish(Point position)
         {
-            if (fishlist != null)
-            {
-                Fish minFish = null; double minDist = double.MaxValue;
-                double dist = double.MaxValue; Fish fish = null;
-                double tempDist = 0;
-                foreach (Fish tempfish in fishlist)
-                {
-                    tempDist = Point.Subtract(tempfish.position, position).Length;
-                    if (tempDist < dist) { dist = tempDist; fish = tempfish; }
-                }
-                return (minFish, minDist);
-            }
-            else { return (null, Double.MaxValue); }
+            if (fishlist == null) { return (null, Double.MaxValue); }
 
+            Fish minFish = null; double minDist = double.MaxValue;
+            double dist = double.MaxValue; Fish fish = null;
+            double tempDist = 0;
+            foreach (Fish tempfish in fishlist)
+            {
+                tempDist = Point.Subtract(tempfish.position, position).Length;
+                if (tempDist < dist) { dist = tempDist; fish = tempfish; }
+            }
+            return (minFish, minDist);
         }
 
         public void Add(Fish fish)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aquarium
 {
-    internal class SharkManager
+    internal class FishSpawner
     {
     }
 }
