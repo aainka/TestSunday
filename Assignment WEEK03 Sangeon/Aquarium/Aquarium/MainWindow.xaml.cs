@@ -18,10 +18,13 @@ namespace Aquarium
 {
     public partial class MainWindow : Window
     {
+        public CodManager? codManager;SharkManager sharkManager;
 
         public MainWindow()
         { 
             InitializeComponent();
+            codManager=new CodManager(Aquarium,1);
+            sharkManager = new SharkManager(Aquarium, 10);
         }
 
         private void Cave_MouseDown(object sender, MouseButtonEventArgs e)
@@ -29,7 +32,7 @@ namespace Aquarium
             Point cave_position 
                 = new Point(Aquarium.ActualWidth / 20+Cave.ActualWidth/2, Aquarium.ActualHeight*4 / 5-Cave.ActualHeight/4);
             Random random = new Random();
-            new Cod(Aquarium, cave_position, Vector.Multiply(random.Next(2)*2-1, Fish.stdVector));
+            codManager.Spawn(cave_position, Vector.Multiply(random.Next(2)*2-1, Fish.stdVector));
         }
 
         private void AquariumSizeChanged(object sender, SizeChangedEventArgs e)

@@ -27,8 +27,6 @@ namespace Aquarium
             PredatorFishSchoolList.Add(Shark.SharkSchool);
             base.size = Cod.size; base.name = Cod.name;
             (normalSpeed,ChasedSpeed,ChasingSpeed) = (5,50,25);
-
-            timer.Start();
         }
 
         protected override void NormalMove()

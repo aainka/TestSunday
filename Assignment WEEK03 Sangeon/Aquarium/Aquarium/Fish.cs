@@ -30,7 +30,7 @@ namespace Aquarium
         public static Vector stdVector = new Vector(1,0); 
         
 
-        protected DispatcherTimer timer = new DispatcherTimer();
+        //protected DispatcherTimer timer = new DispatcherTimer();
 
         protected List<FishSchool> PreyFishSchoolList = new List<FishSchool>();
         protected List<FishSchool> PredatorFishSchoolList = new List<FishSchool>();
@@ -102,7 +102,7 @@ namespace Aquarium
         {
             _canvas = canvas;this.position = position; this.dirVector = dirVector;
 
-            timer.Tick += TimerMove; timer.Interval = TimeSpan.FromMilliseconds(10);
+            FishManager.timer.Tick += TimerMove;
         }
         protected void LoadImage(string name)
         {
@@ -114,8 +114,8 @@ namespace Aquarium
         }
         public void Dispose()
         {
-            timer.Stop();
             _canvas.Children.Remove(image);
+            FishManager.timer.Tick-= TimerMove;
         }
 
         //MOVE

@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Aquarium
 {
     public class CodManager: FishManager
     {
-        public static new FishSchool fishSchool;
-        public static new Type fishType=typeof(Cod);
-        public CodManager(Canvas canvas,  int intervalTimeUnit)
-            : base(canvas, intervalTimeUnit)
-        {
-            this.canvas = canvas;
-            this.intervalTimeUnit = intervalTimeUnit;
-            base.fishType = fishType;
-        }
+        public static new FishSchool fishSchool=new FishSchool();
+        public CodManager(Canvas canvas, int intervalTimeUnit)
+            : base(canvas, intervalTimeUnit) {base.fishSchool=fishSchool; }
+
 
         protected override void TimerSpawn(object? sender, EventArgs e){;}
+        public override void Spawn(Point position, Vector dirVector)
+        { fishSchool.Add(new Cod(canvas, position, dirVector)); }
     }
 }

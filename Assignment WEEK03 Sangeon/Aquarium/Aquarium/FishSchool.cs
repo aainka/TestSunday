@@ -10,7 +10,7 @@ namespace Aquarium
 {
     public class FishSchool
     {
-        public List<Fish> fishlist = new List<Fish>();
+        public List<Fish>? fishlist = null;
 
         public FishSchool()
         {
@@ -39,7 +39,8 @@ namespace Aquarium
 
         public void Add(Fish fish)
         {
-            fishlist.Add(fish);
+            if (fishlist == null) { fishlist = new List<Fish>() { fish }; }
+            else { fishlist.Add(fish); }
         }
 
         public void Add(FishSchool fishSchool)

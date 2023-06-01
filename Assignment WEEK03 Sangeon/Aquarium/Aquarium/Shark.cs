@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Diagnostics;
 
 namespace Aquarium
 {
@@ -30,8 +31,6 @@ namespace Aquarium
             
             //Only Shark
             direction = (angle < 90 && angle > -90) ? Direction.RIGHT : Direction.LEFT;
-
-            timer.Start();
         }
 
         protected override void NormalMove()
@@ -47,8 +46,8 @@ namespace Aquarium
 
         protected override void UpdatePreyFishListSpecific()
         {
-            if (PreyFishSchool==null) { return; }
-
+            if (PreyFishSchool.fishlist==null) { return;  Debug.WriteLine("Here!"); }
+            Debug.WriteLine(PreyFishSchool.fishlist.Count);
             Direction _direction = (angle < 90 && angle > -90) ? Direction.RIGHT : Direction.LEFT;
             foreach (Fish preyFish in PreyFishSchool.fishlist)
             {
@@ -59,7 +58,7 @@ namespace Aquarium
         }
         protected override void UpdatePredatorFishListSpecific()
         {
-            if (PredatorFishSchool == null) { return; }
+            if (PredatorFishSchool.fishlist == null) { return; }
 
             Direction _direction = (angle < 90 && angle > -90) ? Direction.RIGHT : Direction.LEFT;
             foreach (Fish predatorFish in PredatorFishSchool.fishlist)
