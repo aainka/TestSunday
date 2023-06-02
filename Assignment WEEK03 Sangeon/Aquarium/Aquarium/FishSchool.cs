@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Math;
+using System.Diagnostics;
 
 namespace Aquarium
 {
     public class FishSchool
     {
-        public List<Fish>? fishlist = null;
+        public List<Fish>? fishList = new List<Fish>();
 
         public FishSchool()
         {
@@ -19,33 +20,32 @@ namespace Aquarium
 
         public FishSchool(List<Fish> fishlist)
         {
-            this.fishlist = fishlist;
+            this.fishList = fishlist;
         }
 
         public (Fish?, double) NearestFish(Point position)
         {
-            if (fishlist == null) { return (null, Double.MaxValue); }
+            if (fishList == null) { return (null, Double.MaxValue);}
 
             Fish minFish = null; double minDist = double.MaxValue;
-            double dist = double.MaxValue; Fish fish = null;
             double tempDist = 0;
-            foreach (Fish tempfish in fishlist)
+            foreach (Fish tempfish in fishList)
             {
                 tempDist = Point.Subtract(tempfish.position, position).Length;
-                if (tempDist < dist) { dist = tempDist; fish = tempfish; }
+                if (tempDist < minDist) { minDist = tempDist; minFish = tempfish; }
             }
             return (minFish, minDist);
         }
 
         public void Add(Fish fish)
         {
-            if (fishlist == null) { fishlist = new List<Fish>() { fish }; }
-            else { fishlist.Add(fish); }
+            if (fishList == null) { fishList = new List<Fish>() { fish }; }
+            else { fishList.Add(fish); }
         }
 
         public void Add(FishSchool fishSchool)
         {
-            fishSchool.fishlist.ForEach(fish => fishlist.Add(fish));
+            fishSchool.fishList.ForEach(fish => fishList.Add(fish));
         }
 
 

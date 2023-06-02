@@ -14,7 +14,6 @@ namespace Aquarium
 
     class Cod : Fish
     {
-        public static FishSchool CodSchool = new FishSchool();
         public readonly static new Size size = new Size(100, 50);
         public readonly static new string name="Cod";
 
@@ -23,25 +22,41 @@ namespace Aquarium
         {
             LoadImage(Cod.name);
 
-            CodSchool.Add(this);
-            PredatorFishSchoolList.Add(Shark.SharkSchool);
+            PredatorFishSchoolList.Add(SharkManager.fishSchool);
             base.size = Cod.size; base.name = Cod.name;
-            (normalSpeed,ChasedSpeed,ChasingSpeed) = (5,50,25);
+            (normalSpeed,chasedSpeed,chasingAccelation) = (5,1000,1);
+            alertRadius = 400;
+            fishSchool = CodManager.fishSchool;
         }
 
         protected override void NormalMove()
         {
+            image.Source = normalImage;
+
             double nextAngle=angle+ dice.NextDouble()*10-5;
             double nextSpeed = normalSpeed + dice.NextDouble() * 3-1.5;
 
             Matrix tf = Matrix.Identity; tf.Scale(nextSpeed, nextSpeed); tf.Rotate(nextAngle);
             dirVector = tf.Transform(stdVector);
 
-            if (OutOfCanvasPartial()) { dirVector = -dirVector; }
+            if (NextMoveOutOfCanvas()) { dirVector = -dirVector; }
         }
 
         protected override void UpdatePreyFishListSpecific() {; }
         protected override void UpdatePredatorFishListSpecific() {; }
+
+        bool NextMoveOutOfCanvas()
+        {
+            Point nextPosition = Point.Add(position, dirVector);
+            if (
+                (nextPosition.X + size.Width / 2 < 0) //Out of Left
+                || (nextPosition.X - size.Width / 2 > _canvas.ActualWidth) //Out of Right
+                || (nextPosition.Y + size.Height / 2 < 0) //Out of Top
+                || (nextPosition.Y - size.Height / 2 > _canvas.ActualHeight)//Out of Bottom
+               ) { return true; }
+
+            return false;
+        }
 
     }
 }

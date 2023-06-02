@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Windows;
-//Q. What is the difference btw System.Windows and System.Drawing?
+//Q. What is the difference btw System.WindoARTws and System.Drawing?
 using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics;
 
 namespace Aquarium
 {
@@ -34,7 +35,7 @@ namespace Aquarium
             this.intervalTimeUnit = intervalTimeUnit;
 
             FishManager.timer.Interval = unitTime; timer.Start();
-            removeTimer.Interval = unitTime * 100;
+            removeTimer.Interval = unitTime * 50;
             removeTimer.Tick += TimerRemove; removeTimer.Start();
             spawnTimer.Interval= unitTime*intervalTimeUnit;
             spawnTimer.Tick += TimerSpawn; spawnTimer.Start();
@@ -46,16 +47,21 @@ namespace Aquarium
         //TimerEvent
         private void TimerRemove(object? sender, EventArgs e)
         {
-            if (fishSchool.fishlist == null) { return; }
-            foreach (Fish fish in fishSchool.fishlist)
-            {if (fish.OutOfCanvasEntirely()) { fish.Dispose(); }}
+            if (fishSchool.fishList == null) { return; }
+            for (int tempFishIndex = fishSchool.fishList.Count - 1;
+                tempFishIndex >= 0; tempFishIndex--)
+            {
+                if (fishSchool.fishList[tempFishIndex].CurrentOutOfCanvas()) 
+                {
+                    Debug.WriteLine(fishSchool.fishList[tempFishIndex].name
+                        + " Out of Range");
+                    fishSchool.fishList[tempFishIndex].Dispose(); 
+                }
+            }
         }
         abstract protected void TimerSpawn(object? sender, EventArgs e);
         abstract public void Spawn(Point position, Vector dirVector);
-        //{
-        //    object? fish=System.Activator.CreateInstance(fishType, position, dirVector);
-        //    fishSchool.Add(fish);
-        //}
+
         //Q. Is default accessor of fields and methods "private"?
     }
 }

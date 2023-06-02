@@ -29,17 +29,18 @@ namespace Aquarium
         public Random dice= new Random();
         public static Vector stdVector = new Vector(1,0); 
         
-
-        //protected DispatcherTimer timer = new DispatcherTimer();
-
         protected List<FishSchool> PreyFishSchoolList = new List<FishSchool>();
         protected List<FishSchool> PredatorFishSchoolList = new List<FishSchool>();
         protected FishSchool PreyFishSchool = new FishSchool();
         protected FishSchool PredatorFishSchool = new FishSchool();
 
+        private FishSchool _fishSchool;
+        protected FishSchool fishSchool
+        { get { return _fishSchool; } set { _fishSchool = value; } }
+
 
         public double alertRadius;
-        public double normalSpeed;  public double ChasingSpeed; public double ChasedSpeed;
+        public double normalSpeed;  public double chasingAccelation; public double chasedSpeed;
 
         private string _name;
         public string name
@@ -100,15 +101,19 @@ namespace Aquarium
         //BIRTH AND DEATH
         public Fish(Canvas canvas, Point position, Vector dirVector)
         {
-            _canvas = canvas;this.position = position; this.dirVector = dirVector;
+            _canvas = canvas; this.position = position; this.dirVector = dirVector;
 
             FishManager.timer.Tick += TimerMove;
+
+            Debug.WriteLine("Cod: {0}, Shark: {1}",
+                    CodManager.fishSchool.fishList.Count(), SharkManager.fishSchool.fishList.Count());
         }
+
         protected void LoadImage(string name)
         {
-            normalImage = new BitmapImage(new Uri(@"/Images/" + name + "_normal.png", UriKind.RelativeOrAbsolute));
-            chasedImage = new BitmapImage(new Uri(@"/Images/" + name + "_chased.png", UriKind.RelativeOrAbsolute));
-            chasingImage = new BitmapImage(new Uri(@"/Images/" + name + "_chasing.png", UriKind.RelativeOrAbsolute));
+            normalImage = new BitmapImage(new Uri(@"/Images/" + name.ToLower() + "_normal.png", UriKind.RelativeOrAbsolute));
+            chasedImage = new BitmapImage(new Uri(@"/Images/" + name.ToLower() + "_chased.png", UriKind.RelativeOrAbsolute));
+            chasingImage = new BitmapImage(new Uri(@"/Images/" + name.ToLower() + "_chasing.png", UriKind.RelativeOrAbsolute));
             image.Source = normalImage;
             _canvas.Children.Add(image);
         }
@@ -116,6 +121,7 @@ namespace Aquarium
         {
             _canvas.Children.Remove(image);
             FishManager.timer.Tick-= TimerMove;
+            fishSchool.fishList.Remove(this);
         }
 
         //MOVE
@@ -126,37 +132,47 @@ namespace Aquarium
             var (preyFishInBusiness, distPreyFishInBusiness)= PreyFishSchool.NearestFish(position);
             var (predatorFishInBusiness, distPredatorFishInBusiness) = PredatorFishSchool.NearestFish(position);
 
-            if (predatorFishInBusiness!=null && ContactWith(predatorFishInBusiness)) { Dispose(); }
+            if (predatorFishInBusiness!=null && ContactWith(predatorFishInBusiness)) 
+            {
+                Dispose();
+                Debug.WriteLine(name + " Eaten");
+                Debug.WriteLine("Cod: {0}, Shark: {1}",
+                    CodManager.fishSchool.fishList.Count(), SharkManager.fishSchool.fishList.Count());
+            }
             if (Min(distPreyFishInBusiness, distPredatorFishInBusiness) > alertRadius) { NormalMove(); }
             else
             {
                 if (distPredatorFishInBusiness <= distPreyFishInBusiness) { ChasedMove(predatorFishInBusiness); }
-                else { ChasedMove(preyFishInBusiness); }
+                else { ChasingMove(preyFishInBusiness); }
             }
             
             position = Vector.Add(dirVector, position);
         }
 
         abstract protected void NormalMove();
-        private void ChasingMove(Fish preyFishInBusiness)
-        {
-            if (preyFishInBusiness == null) { return; }
-
-            image.Source = chasingImage;
-            Vector displacementVector = Point.Subtract(preyFishInBusiness.position,position);
-            double distance = displacementVector.Length;
-            displacementVector.Normalize();
-            dirVector=Vector.Multiply(-Min(50,ChasingSpeed/distance), displacementVector);
-        }
         private void ChasedMove(Fish predatorFishInBusiness)
         {
             if (predatorFishInBusiness == null) { return; }
 
-            image.Source= chasingImage;
-            Vector displacementVector = Point.Subtract(predatorFishInBusiness.position, position);
+            image.Source = chasedImage;
+            Vector displacementVector = Point.Subtract(predatorFishInBusiness.position,position);
+            double distance = displacementVector.Length;
             displacementVector.Normalize();
+            dirVector=Vector.Multiply(-Min(50, chasedSpeed/ distance), displacementVector);
+        }
+        private void ChasingMove(Fish preyFishInBusiness)
+        {
+            if (preyFishInBusiness == null) { return; }
 
-            dirVector=Vector.Multiply(ChasedSpeed,displacementVector);
+            image.Source= chasingImage;
+            Vector displacementVector = Point.Subtract(preyFishInBusiness.position, position);
+            Vector displacementNormalizedVector
+                = Vector.Multiply(1/displacementVector.Length, displacementVector);
+            Vector dirNormalizedVector
+                =Vector.Multiply(1/dirVector.Length, dirNormalizedVector);
+            Vector tempVector = Vector.Subtract(displacementNormalizedVector,dirNormalizedVector);
+            
+            dirVector=Vector.Add(dirVector,Vector.Multiply(chasingAccelation,tempVector));
         }
 
         //PREY & PREDATOR UPDATE
@@ -166,9 +182,11 @@ namespace Aquarium
         }
         private void UpdatePreyFishListGeneral()
         {
+            PreyFishSchool = new FishSchool();
             foreach (FishSchool fishSchool in PreyFishSchoolList)
             {
-                foreach (Fish preyFish in fishSchool.fishlist)
+                if (fishSchool.fishList == null) { continue; }
+                foreach (Fish preyFish in fishSchool.fishList)
                 {
                     PreyFishSchool.Add(preyFish);
                 }
@@ -176,15 +194,16 @@ namespace Aquarium
         }
         private void UpdatePredatorFishListGeneral()
         {
+            PredatorFishSchool = new FishSchool();
             foreach (FishSchool fishSchool in PredatorFishSchoolList)
             {
-                foreach (Fish predatorFish in fishSchool.fishlist)
+                if (fishSchool.fishList == null) { continue; }
+                foreach (Fish predatorFish in fishSchool.fishList)
                 {
                     PredatorFishSchool.Add(predatorFish);
                 }
             }
         }
-
         private void UpdateFishListSpecific()
         {
             UpdatePreyFishListSpecific(); UpdatePredatorFishListSpecific();
@@ -198,24 +217,11 @@ namespace Aquarium
             if(otherFIsh==null) return false;
             
             Vector displacementVector = Point.Subtract(otherFIsh.position, position);
-            if (displacementVector.X < (size.Width + otherFIsh.size.Width) / 2
-                && displacementVector.Y < (size.Height + otherFIsh.size.Height) / 2)
-            { return true; }
+            if (displacementVector.Length<100){ return true; }
             else {  return false; }
         }
-        public bool OutOfCanvasPartial()
-        {
 
-            if (
-                (position.X - size.Width / 2 < 0) //Out of Left
-                || (position.X + size.Width / 2 > _canvas.ActualWidth) //Out of Right
-                || (position.Y - size.Height / 2 < 0) //Out of Top
-                || (position.Y + size.Height / 2 > _canvas.ActualHeight)//Out of Bottom
-               ) { return true; }
-
-            return false;
-        }
-        public bool OutOfCanvasEntirely()
+        public bool CurrentOutOfCanvas()
         {
             if (
                 (position.X + size.Width / 2 < 0) //Out of Left

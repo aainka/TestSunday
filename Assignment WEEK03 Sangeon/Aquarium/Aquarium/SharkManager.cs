@@ -12,15 +12,13 @@ namespace Aquarium
     {
         public static new FishSchool fishSchool=new FishSchool();
 
-
-
         public SharkManager(Canvas canvas,int intervalTimeUnit)
             : base(canvas, intervalTimeUnit) { base.fishSchool = fishSchool; }
 
         protected override void TimerSpawn(object? sender, EventArgs e)
         {
             double spawnY
-                =dice.NextDouble()*(canvas.ActualHeight-2*Shark.size.Height)+canvas.ActualHeight;
+                =dice.NextDouble()*(canvas.ActualHeight-2*Shark.size.Height)+ Shark.size.Height;
             double spawnX;
             switch (dice.Next(2))
             {

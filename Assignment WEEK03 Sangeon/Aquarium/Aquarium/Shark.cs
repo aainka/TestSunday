@@ -11,7 +11,6 @@ namespace Aquarium
 {
     class Shark : Fish
     {
-        public static FishSchool SharkSchool = new FishSchool();
         public readonly static new Size size = new Size(300, 90);
         public readonly static new string name = "Shark";
 
@@ -24,48 +23,55 @@ namespace Aquarium
         {
             LoadImage(Shark.name);
 
-            SharkSchool.Add(this);
-            PreyFishSchoolList.Add(Shark.SharkSchool);
+            PreyFishSchoolList.Add(CodManager.fishSchool);
             base.size = Shark.size; base.name = Shark.name;
-            (normalSpeed, ChasedSpeed, ChasingSpeed) = (10, 100, 50);
-            
+            (normalSpeed, chasedSpeed, chasingAccelation) = (5, 20, 0.5);
+            alertRadius = 400;
+            fishSchool = SharkManager.fishSchool;
+
             //Only Shark
             direction = (angle < 90 && angle > -90) ? Direction.RIGHT : Direction.LEFT;
         }
 
         protected override void NormalMove()
         {
+            image.Source = normalImage;
             switch (direction)
             {
-                case Direction.LEFT:
-                    dirVector = Vector.Multiply(normalSpeed, Fish.stdVector);break;
                 case Direction.RIGHT:
+                    dirVector = Vector.Multiply(normalSpeed, Fish.stdVector);break;
+                case Direction.LEFT:
                     dirVector = Vector.Multiply(-normalSpeed, Fish.stdVector); break;
             }
         }
 
         protected override void UpdatePreyFishListSpecific()
         {
-            if (PreyFishSchool.fishlist==null) { return;  Debug.WriteLine("Here!"); }
-            Debug.WriteLine(PreyFishSchool.fishlist.Count);
+            if (PreyFishSchool.fishList==null) { return; }
             Direction _direction = (angle < 90 && angle > -90) ? Direction.RIGHT : Direction.LEFT;
-            foreach (Fish preyFish in PreyFishSchool.fishlist)
+            //foreach (Fish preyFish in PreyFishSchool.fishList) 
+            //A. Never modify the number of the list within for statement
+            for (int tempPreyFishIndex=PreyFishSchool.fishList.Count-1; 
+                tempPreyFishIndex>=0; tempPreyFishIndex--)
             {
-                if ((_direction == Direction.RIGHT && preyFish.position.X < position.X)
-                    ||(_direction == Direction.LEFT && preyFish.position.X > position.X))
-                { PreyFishSchool.fishlist.Remove(preyFish); }
+                Fish tempPreyFish = PreyFishSchool.fishList[tempPreyFishIndex];
+                if ((_direction == Direction.RIGHT && tempPreyFish.position.X < position.X)
+                    ||(_direction == Direction.LEFT && tempPreyFish.position.X > position.X))
+                { PreyFishSchool.fishList.Remove(tempPreyFish); }
             }
         }
         protected override void UpdatePredatorFishListSpecific()
         {
-            if (PredatorFishSchool.fishlist == null) { return; }
-
+            if (PredatorFishSchool.fishList == null) { return; }
             Direction _direction = (angle < 90 && angle > -90) ? Direction.RIGHT : Direction.LEFT;
-            foreach (Fish predatorFish in PredatorFishSchool.fishlist)
+
+            for (int tempPredatorFishIndex = PredatorFishSchool.fishList.Count - 1;
+                tempPredatorFishIndex >= 0; tempPredatorFishIndex--)
             {
-                if ((_direction == Direction.RIGHT && predatorFish.position.X < position.X)
-                    || (_direction == Direction.LEFT && predatorFish.position.X > position.X))
-                { PredatorFishSchool.fishlist.Remove(predatorFish); }
+                Fish tempPredatorFish = PredatorFishSchool.fishList[tempPredatorFishIndex];
+                if ((_direction == Direction.RIGHT && tempPredatorFish.position.X < position.X)
+                    || (_direction == Direction.LEFT && tempPredatorFish.position.X > position.X))
+                { PredatorFishSchool.fishList.Remove(tempPredatorFish); }
             }
         }
 
