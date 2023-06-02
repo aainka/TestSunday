@@ -32,7 +32,7 @@ namespace Aquarium
         protected override void NormalMove()
         {
             image.Source = normalImage;
-
+             
             double nextAngle=angle+ dice.NextDouble()*10-5;
             double nextSpeed = normalSpeed + dice.NextDouble() * 3-1.5;
 
