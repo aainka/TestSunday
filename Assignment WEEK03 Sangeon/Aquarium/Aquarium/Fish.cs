@@ -168,11 +168,8 @@ namespace Aquarium
             Vector displacementVector = Point.Subtract(preyFishInBusiness.position, position);
             Vector displacementNormalizedVector
                 = Vector.Multiply(1/displacementVector.Length, displacementVector);
-            Vector dirNormalizedVector
-                =Vector.Multiply(1/dirVector.Length, dirNormalizedVector);
-            Vector tempVector = Vector.Subtract(displacementNormalizedVector,dirNormalizedVector);
             
-            dirVector=Vector.Add(dirVector,Vector.Multiply(chasingAccelation,tempVector));
+            dirVector=Vector.Add(dirVector,Vector.Multiply(chasingAccelation, displacementNormalizedVector));
         }
 
         //PREY & PREDATOR UPDATE
