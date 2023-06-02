@@ -33,6 +33,6 @@ namespace Aquarium
             }
         }
         public override void Spawn(Point position, Vector dirVector)
-        { fishSchool.Add(new Shark(canvas, position, dirVector)); }
+        { fishSchool.Add(new Shark(canvas, position, dirVector)); FishManager.PrintNumberOfFish(); }
     }
 }

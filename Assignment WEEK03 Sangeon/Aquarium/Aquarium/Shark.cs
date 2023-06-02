@@ -25,8 +25,8 @@ namespace Aquarium
 
             PreyFishSchoolList.Add(CodManager.fishSchool);
             base.size = Shark.size; base.name = Shark.name;
-            (normalSpeed, chasedSpeed, chasingAccelation) = (5, 20, 0.5);
-            alertRadius = 400;
+            (normalSpeed, chasedAccelation, chasingAccelation) = (5, 1, 0.5);
+            (chasingSpeedLimit, chasedSpeedLimit) = (15, 15); alertRadius = 300;
             fishSchool = SharkManager.fishSchool;
 
             //Only Shark
@@ -36,12 +36,19 @@ namespace Aquarium
         protected override void NormalMove()
         {
             image.Source = normalImage;
+            Vector accelerationVector = new Vector();Vector targetDirVector = new Vector();
             switch (direction)
             {
                 case Direction.RIGHT:
-                    dirVector = Vector.Multiply(normalSpeed, Fish.stdVector);break;
+                    targetDirVector = Vector.Multiply(normalSpeed, Fish.stdVector); 
+                    accelerationVector = Vector.Subtract(targetDirVector,dirVector);
+                    dirVector = Vector.Add(dirVector,Vector.Multiply(0.2,accelerationVector));
+                    break;
                 case Direction.LEFT:
-                    dirVector = Vector.Multiply(-normalSpeed, Fish.stdVector); break;
+                    targetDirVector = Vector.Multiply(-normalSpeed, Fish.stdVector);
+                    accelerationVector = Vector.Subtract(targetDirVector, dirVector);
+                    dirVector = Vector.Add(dirVector, Vector.Multiply(0.2, accelerationVector));
+                    break;
             }
         }
 

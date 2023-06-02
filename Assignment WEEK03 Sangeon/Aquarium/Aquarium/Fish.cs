@@ -40,7 +40,8 @@ namespace Aquarium
 
 
         public double alertRadius;
-        public double normalSpeed;  public double chasingAccelation; public double chasedSpeed;
+        public double normalSpeed;  public double chasingAccelation; public double chasedAccelation;
+        public double chasingSpeedLimit; public double chasedSpeedLimit;
 
         private string _name;
         public string name
@@ -104,9 +105,6 @@ namespace Aquarium
             _canvas = canvas; this.position = position; this.dirVector = dirVector;
 
             FishManager.timer.Tick += TimerMove;
-
-            Debug.WriteLine("Cod: {0}, Shark: {1}",
-                    CodManager.fishSchool.fishList.Count(), SharkManager.fishSchool.fishList.Count());
         }
 
         protected void LoadImage(string name)
@@ -135,9 +133,7 @@ namespace Aquarium
             if (predatorFishInBusiness!=null && ContactWith(predatorFishInBusiness)) 
             {
                 Dispose();
-                Debug.WriteLine(name + " Eaten");
-                Debug.WriteLine("Cod: {0}, Shark: {1}",
-                    CodManager.fishSchool.fishList.Count(), SharkManager.fishSchool.fishList.Count());
+                Debug.WriteLine(name + " Eaten"); FishManager.PrintNumberOfFish();
             }
             if (Min(distPreyFishInBusiness, distPredatorFishInBusiness) > alertRadius) { NormalMove(); }
             else
@@ -155,10 +151,13 @@ namespace Aquarium
             if (predatorFishInBusiness == null) { return; }
 
             image.Source = chasedImage;
-            Vector displacementVector = Point.Subtract(predatorFishInBusiness.position,position);
-            double distance = displacementVector.Length;
-            displacementVector.Normalize();
-            dirVector=Vector.Multiply(-Min(50, chasedSpeed/ distance), displacementVector);
+            Vector displacementVector = Point.Subtract(predatorFishInBusiness.position, position);
+            Vector displacementNormalizedVector
+                = Vector.Multiply(1 / displacementVector.Length, displacementVector);
+
+            Vector accelatedDirVector = Vector.Add(dirVector, Vector.Multiply(-chasedAccelation, displacementNormalizedVector));
+            dirVector = (accelatedDirVector.Length > chasedSpeedLimit) ? 
+                Vector.Multiply(chasedSpeedLimit/accelatedDirVector.Length,accelatedDirVector): accelatedDirVector;
         }
         private void ChasingMove(Fish preyFishInBusiness)
         {
@@ -168,8 +167,10 @@ namespace Aquarium
             Vector displacementVector = Point.Subtract(preyFishInBusiness.position, position);
             Vector displacementNormalizedVector
                 = Vector.Multiply(1/displacementVector.Length, displacementVector);
-            
-            dirVector=Vector.Add(dirVector,Vector.Multiply(chasingAccelation, displacementNormalizedVector));
+
+            Vector accelatedDirVector = Vector.Add(dirVector, Vector.Multiply(chasingAccelation, displacementNormalizedVector));
+            dirVector = (accelatedDirVector.Length > chasingSpeedLimit) ?
+                Vector.Multiply(chasingSpeedLimit / accelatedDirVector.Length, accelatedDirVector) : accelatedDirVector;
         }
 
         //PREY & PREDATOR UPDATE
@@ -218,13 +219,15 @@ namespace Aquarium
             else {  return false; }
         }
 
-        public bool CurrentOutOfCanvas()
+        public bool OutOfCanvas()
+        {return OutOfCanvas(0);}
+        public bool OutOfCanvas(double margin)
         {
             if (
-                (position.X + size.Width / 2 < 0) //Out of Left
-                || (position.X - size.Width / 2 > _canvas.ActualWidth) //Out of Right
-                || (position.Y + size.Height / 2 < 0) //Out of Top
-                || (position.Y - size.Height / 2 > _canvas.ActualHeight)//Out of Bottom
+                (position.X + (size.Width/ 2 + margin) < 0) //Out of Left
+                || (position.X - (size.Width / 2 + margin) > _canvas.ActualWidth) //Out of Right
+                || (position.Y + (size.Height / 2 + margin) < 0) //Out of Top
+                || (position.Y - (size.Height / 2 + margin) > _canvas.ActualHeight)//Out of Bottom
                ) { return true; }
 
             return false;

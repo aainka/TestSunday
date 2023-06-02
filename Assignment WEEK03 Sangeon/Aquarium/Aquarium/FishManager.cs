@@ -51,11 +51,10 @@ namespace Aquarium
             for (int tempFishIndex = fishSchool.fishList.Count - 1;
                 tempFishIndex >= 0; tempFishIndex--)
             {
-                if (fishSchool.fishList[tempFishIndex].CurrentOutOfCanvas()) 
+                if (fishSchool.fishList[tempFishIndex].OutOfCanvas()) 
                 {
-                    Debug.WriteLine(fishSchool.fishList[tempFishIndex].name
-                        + " Out of Range");
-                    fishSchool.fishList[tempFishIndex].Dispose(); 
+                    Debug.WriteLine(fishSchool.fishList[tempFishIndex].name+ " Out of Range");
+                    fishSchool.fishList[tempFishIndex].Dispose(); FishManager.PrintNumberOfFish();
                 }
             }
         }
@@ -63,6 +62,12 @@ namespace Aquarium
         abstract public void Spawn(Point position, Vector dirVector);
 
         //Q. Is default accessor of fields and methods "private"?
+
+        static public void PrintNumberOfFish()
+        {
+            Debug.WriteLine("Cod: {0}, Shark: {1}",
+                    CodManager.fishSchool.fishList.Count(), SharkManager.fishSchool.fishList.Count());
+        }
     }
 }
 //Q. Is it possible to add a new method or field to an existing class?

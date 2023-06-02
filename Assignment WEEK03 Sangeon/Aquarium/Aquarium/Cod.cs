@@ -24,8 +24,8 @@ namespace Aquarium
 
             PredatorFishSchoolList.Add(SharkManager.fishSchool);
             base.size = Cod.size; base.name = Cod.name;
-            (normalSpeed,chasedSpeed,chasingAccelation) = (5,1000,1);
-            alertRadius = 400;
+            (normalSpeed,chasedAccelation,chasingAccelation) = (5,1,1);
+            (chasingSpeedLimit, chasedSpeedLimit) = (10,10); alertRadius = 350;
             fishSchool = CodManager.fishSchool;
         }
 
