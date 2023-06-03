@@ -36,10 +36,13 @@ namespace Aquarium_3_week
         int RighteyeFlounderCount = 1;
         int RighteyeFlounderHp = 4;
 
+        int RedSeabreamCount = 1;
+        int RedSeabreamHp = 4;
+
 
         private void FishAdd_Click(object sender, RoutedEventArgs e)
         {
-            switch (random.Next()%4 + 1)
+            switch (random.Next()%5 + 1)
             {
                     case 1:
                     new BluefinTuna(aquarium, 10, 10, 10, BluefinTunaHp, "참다랑어" + (BluefinTunaCount++));
@@ -50,6 +53,9 @@ namespace Aquarium_3_week
                     case 3:
                     new RighteyeFlounder(aquarium, 10, 10, 10, RighteyeFlounderHp, "가자미" + (RighteyeFlounderCount++));
                     break;
+                    case 4:
+                    new RedSeabream(aquarium, 10, 10, 10, RedSeabreamHp, "참돔" + (RedSeabreamCount++));
+                    break;
             }
         }
 
@@ -58,6 +64,7 @@ namespace Aquarium_3_week
             BluefinTunaHp++;
             SalmonHp++;
             RighteyeFlounderHp++;
+            RedSeabreamHp ++;
         }
 
         private void Canvas_size_changed(object sender, SizeChangedEventArgs e)
@@ -671,6 +678,202 @@ namespace Aquarium_3_week
 
     }
 
+    class RedSeabream //참돔 class 생성
+    {
+        Image RedSeabream_Img = new Image(); //이미지 파일 생성
+        TextBlock RedSeabream_Text = new TextBlock();  //가자미 이름 파일 생성
+        TextBlock RedSeabreamHp_Text = new TextBlock(); //가자미 체력 파일 생성
+
+        Random random = new Random(); //랜덤 class 사용
+        DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();//타이머 class 사용
+
+        private Canvas canvasA; //canvas 선언
+        private int speed = 10; //가자미 속도 설정
+        private static int MaxHp = 7; //가자미 최대 체력 설정
+        private int Energy = MaxHp; //가자미 체력 설정
+
+
+
+        public Point pos
+        {
+            get
+            {
+                return new Point(
+                    Canvas.GetLeft(RedSeabream_Img),
+                    Canvas.GetTop(RedSeabream_Img)
+                );
+            }
+            set
+            {
+                Canvas.SetLeft(RedSeabream_Img, value.X);
+                Canvas.SetTop(RedSeabream_Img, value.Y);//참돔 좌표 설정
+
+                Canvas.SetLeft(RedSeabream_Text, value.X);
+                Canvas.SetTop(RedSeabream_Text, value.Y - 40); //참돔 이름 좌표 설정
+
+                Canvas.SetLeft(RedSeabreamHp_Text, value.X);
+                Canvas.SetTop(RedSeabreamHp_Text, value.Y - 20); //참돔 체력 좌표 설정
+            }
+        }
+
+
+
+        public RedSeabream(Canvas canvas, double x, double y, int speed, int Max_Hp, string name)
+        {
+            this.canvasA = canvas;
+            this.speed = speed;
+            MaxHp = Max_Hp;
+            this.Energy = Max_Hp;
+            pos = new Point(x, y);
+
+            RedSeabream_Img.Source = new BitmapImage(
+                   new Uri(@"/fishimg/red seabream(inversion).png", UriKind.RelativeOrAbsolute)
+               );
+
+            RedSeabream_Img.Width = 30;
+
+            RedSeabream_Img.MouseLeftButtonDown += RighteyeFlounderHurt_MouseDown;
+            RedSeabream_Img.MouseRightButtonDown += RighteyeFlounderHeal_MouseDown;
+
+            RedSeabream_Text.FontSize = 10;
+            RedSeabream_Text.VerticalAlignment = VerticalAlignment.Center;
+            RedSeabream_Text.HorizontalAlignment = HorizontalAlignment.Center;
+            RedSeabream_Text.Background = Brushes.Black;
+            RedSeabream_Text.Foreground = Brushes.Yellow;
+            RedSeabream_Text.Text = name;
+
+            RedSeabreamHp_Text.FontSize = 10;
+            RedSeabreamHp_Text.VerticalAlignment = VerticalAlignment.Center;
+            RedSeabreamHp_Text.HorizontalAlignment = HorizontalAlignment.Center;
+            RedSeabreamHp_Text.Background = Brushes.Black;
+            RedSeabreamHp_Text.Foreground = Brushes.OrangeRed;
+
+            string Hp = "";
+            for (int i = 1; i <= Energy; i++)
+            {
+                Hp = Hp + "■";
+            }
+
+            RedSeabreamHp_Text.Text = Hp;
+
+            canvas.Children.Add(RedSeabream_Img);
+            canvas.Children.Add(RedSeabream_Text);
+            canvas.Children.Add(RedSeabreamHp_Text);
+
+            timer.Tick += timer_Tick;
+            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Start();
+
+        }
+        void timer_Tick(object sender, EventArgs e)
+        {
+            Move();
+        }
+
+        private void RighteyeFlounderHurt_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Energy--;
+            string Hp = "";
+            for (int i = 1; i <= Energy; i++)
+            {
+                Hp = Hp + "■";
+            }
+            for (int i = 1; i <= MaxHp - Energy; i++)
+            {
+                Hp = Hp + "□";
+            }
+            RedSeabreamHp_Text.Text = Hp;
+            if (Energy == 0)
+            {
+                timer.Stop();
+                canvasA.Children.Remove(RedSeabream_Img);
+                canvasA.Children.Remove(RedSeabream_Text);
+                canvasA.Children.Remove(RedSeabreamHp_Text);
+            }
+        }
+
+        private void RighteyeFlounderHeal_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Energy++;
+            string Hp = "";
+            for (int i = 1; i <= Energy; i++)
+            {
+                Hp = Hp + "■";
+            }
+            for (int i = 1; i <= MaxHp - Energy; i++)
+            {
+                Hp = Hp + "□";
+            }
+
+            RedSeabreamHp_Text.Text = Hp;
+
+            if (Energy >= MaxHp)
+            {
+                Energy--;
+            }
+        }
+
+        public void Move()
+        {
+            switch ((random.Next() % 4) + 1)
+            {
+                case 1:
+                    if (pos.Y > canvasA.ActualHeight - 30 - speed)
+                    {
+                        pos = new Point(pos.X, pos.Y - speed);
+
+                    }
+                    else
+                    {
+                        pos = new Point(pos.X, pos.Y + speed);
+
+                    }
+                    break;
+
+                case 2:
+                    if (pos.Y < 50 + speed)
+                    {
+                        pos = new Point(pos.X, pos.Y + speed);
+
+                    }
+                    else
+                    {
+                        pos = new Point(pos.X, pos.Y - speed);
+
+                    }
+                    break;
+                case 3:
+                    if (pos.X > canvasA.ActualWidth - 30 - speed)
+                    {
+                        pos = new Point(pos.X - speed, pos.Y);
+                        RedSeabream_Img.Source = new BitmapImage(
+                   new Uri(@"/fishimg/red seabream.png", UriKind.RelativeOrAbsolute));
+
+                    }
+                    else
+                    {
+                        pos = new Point(pos.X + speed, pos.Y);
+
+                    }
+                    break;
+                case 4:
+                    if (pos.X < 30 + speed)
+                    {
+                        pos = new Point(pos.X + speed, pos.Y);
+                        RedSeabream_Img.Source = new BitmapImage(
+                   new Uri(@"/fishimg/red seabream(inversion).png", UriKind.RelativeOrAbsolute));
+
+                    }
+                    else
+                    {
+                        pos = new Point(pos.X - speed, pos.Y);
+
+                    }
+                    break;
+            }
+        }
+
+    }
 
 }
 
