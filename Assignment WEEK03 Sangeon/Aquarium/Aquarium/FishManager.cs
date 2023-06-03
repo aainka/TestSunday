@@ -51,6 +51,7 @@ namespace Aquarium
                 {
                     Debug.WriteLine(fishSchool.fishList[tempFishIndex].name+ " Out of Range");
                     fishSchool.fishList[tempFishIndex].Dispose(); FishManager.PrintNumberOfFish();
+                    //Q. Is there way I can make class enumerable?
                 }
             }
         }

@@ -12,16 +12,18 @@ namespace Aquarium
     abstract public class Fish
     {
         protected Canvas _canvas;
-        
+
+
         public Image image = new Image();
-        public BitmapImage normalImage=new BitmapImage();
+        public BitmapImage normalImage = new BitmapImage();
         public BitmapImage chasingImage = new BitmapImage();
         public BitmapImage chasedImage = new BitmapImage();
+
         //Q. Can I redefine these attributes to static attribute in the child classes? 
-        
-        public Random dice= new Random();
-        public static Vector stdVector = new Vector(1,0); 
-        
+
+        public Random dice = new Random();
+        public static Vector stdVector = new Vector(1, 0);
+
         protected List<FishSchool> PreyFishSchoolList = new List<FishSchool>();
         protected List<FishSchool> PredatorFishSchoolList = new List<FishSchool>();
         protected FishSchool PreyFishSchool = new FishSchool();
@@ -33,7 +35,7 @@ namespace Aquarium
 
 
         public double alertRadius;
-        public double normalSpeed;  public double chasingAccelation; public double chasedAccelation;
+        public double normalSpeed; public double chasingAccelation; public double chasedAccelation;
         public double chasingSpeedLimit; public double chasedSpeedLimit;
 
         private string _name;
@@ -47,9 +49,12 @@ namespace Aquarium
         private Size _size;
         public Size size
         {
-            get {return _size;}
-            set {image.Width = value.Width; image.Height = value.Height; _size = value; }
+            get { return _size; }
+            set { image.Width = value.Width; image.Height = value.Height; _size = value; }
         }
+        //Q. How can I make the static variable inheritable?
+
+        abstract public int test{ get; }
 
         private Point _position;
         public Point position

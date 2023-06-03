@@ -8,7 +8,8 @@ namespace Aquarium
     class Cod : Fish
     {
         public readonly static new Size size = new Size(100, 50);
-        public readonly static new string name="Cod";
+        public readonly static new string name = "Cod";
+
 
         public Cod(Canvas canvas, Point position, Vector dirVector) 
             : base(canvas, position, dirVector)
