@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+//Q. What is the difference btw System.WindoARTws and System.Drawing?
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using System.Windows;
-//Q. What is the difference btw System.WindoARTws and System.Drawing?
-using static System.Net.Mime.MediaTypeNames;
-using System.Diagnostics;
 
 namespace Aquarium
 {

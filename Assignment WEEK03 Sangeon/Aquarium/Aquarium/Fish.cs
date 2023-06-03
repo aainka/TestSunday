@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Threading;
 using static System.Math;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.NetworkInformation;
-using System.Diagnostics;
 
 namespace Aquarium
 {

@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Math;
-using System.Diagnostics;
 
 namespace Aquarium
 {
@@ -44,22 +39,6 @@ namespace Aquarium
         }
 
         public void Add(FishSchool fishSchool)
-        {
-            fishSchool.fishList.ForEach(fish => fishList.Add(fish));
-        }
-
-
-        ///=====================================================================================
-        //public static FishSchool operator +(FishSchool fishschool, Fish fish)
-        //{
-        //    fishschool.fishlist.Add(fish);
-        //    return fishschool;
-        //}
-
-        //public static FishSchool operator +(FishSchool fishschool1, FishSchool fishschool2)
-        //{
-        //    fishschool2.fishlist.ForEach(fish => fishschool1.fishlist.Add(fish));
-        //    return fishschool1;
-        //}
+        {fishSchool.fishList.ForEach(fish => fishList.Add(fish));}
     }
 }
