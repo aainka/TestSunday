@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="gameproject.code.Ball">
+    <Position X="8" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAJAAAAAAAAAAAAAEAAAAAAAABAAEAAAAAAACAABAAA=</HashCode>
+      <FileName>code\ball.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gameproject.code.Bar">
+    <Position X="5.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>code\Bar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gameproject.code.Block">
+    <Position X="3.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABFAAAAAACAAAACAAAAAAAAAAAAAAAAEAAAAQAAAAAA=</HashCode>
+      <FileName>code\block.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gameproject.code.Ground">
+    <Position X="1" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAACAAAAIAAAAAgEAAAhAAAAAAAAAAAgAAARAA=</HashCode>
+      <FileName>code\Ground.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gameproject.GObject">
+    <Position X="5.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABCAAAAAAAAAAGEAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>GObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
