@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:Block_Break_Game"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="600">
-    <Canvas x:Name ="Canvas1" Height="800" Width="600" Background="White">
-        <Image x:Name="house123" Canvas.Top="100" Canvas.Left="0" Source="/images/blue ball.png" Width="10"/>
+    <Canvas x:Name ="Canvas1" Height="800" Width="600" Background="white">
     </Canvas>
 </Window>

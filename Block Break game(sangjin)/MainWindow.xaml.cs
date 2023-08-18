@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Block_Break_Game.First;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +16,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
+
 //red block size 59*25
 //blue ball size 10*10 45도 회전
+//bottom size 600*25
 
 namespace Block_Break_Game
 {
@@ -24,30 +28,37 @@ namespace Block_Break_Game
     /// </summary>
     public partial class MainWindow : Window
     {
-        DispatcherTimer timer = new DispatcherTimer();
+
         Random random = new Random();
+        Ground xground = null;
 
         public MainWindow()
         {
             InitializeComponent();
-            for (int i = 0; i < 5; i++)
+            xground = new Ground(Canvas1);
+            this.PreviewKeyDown += (s, e) =>
             {
-                for (int j = 0; j < 10; j++)
+                if (Keyboard.IsKeyDown(Key.Space))
                 {
-                    new RedBlock(Canvas1, 60*j, 26 * i);
+                    xground.AddBall();
                 }
-            }
-            timer.Tick += timer_Tick;
-            timer.Interval = TimeSpan.FromMilliseconds(999);
-            timer.Start();
+
+                if (Keyboard.IsKeyDown(Key.Right))
+                {
+                    xground.RightMoveBall();
+                }
+
+                if ((Keyboard.IsKeyDown(Key.Left)))
+                {
+                    xground.LiftMoveBall();
+                }
+            };
+
+              
+
         }
 
-        void timer_Tick(object sender, EventArgs e)
-        {
-            for (int j = 0; j < 10; j++)
-            {
-                new RedBlock(Canvas1, 60 * j, 0);
-            }
-        }
+
+
     }
 }
