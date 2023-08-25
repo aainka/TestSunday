@@ -15,12 +15,7 @@ namespace Block_Break_Game.First
     public class Block : GObject
     {
         static public List<Block> BlockList = new List<Block>();
-      
-       
-
         public bool[] sight = new bool[1]; // 죽은 block과 죽지 않은 block을 구분
-
-
         int live = 0;
       
 
@@ -46,15 +41,11 @@ namespace Block_Break_Game.First
                 }
             }
         }
-        public void move()
+        public void BlockMove()
         {
             loc = new Point(loc.Y , loc.X + 20);
         }
-        public void Dispose()
-        {
-            _ground._canvas.Children.Remove(block);
-
-        }
+ 
         public bool contains(Ball k)
         {
             if (loc.X < k.loc.X && loc.X + Width > k.loc.X)

@@ -36,11 +36,12 @@ namespace Block_Break_Game.First
                 Point currentPossition = e.GetPosition(canvas);
                 xbar.loc = currentPossition;
                 xbar.loc = new Point(xbar.loc.X, 600);
-            };
+            }; // 바 위치 설정
+
             _canvas.MouseLeftButtonDown += (s, e) =>
             {
                 AddBall();
-            };
+            };//마우스 좌클릭 시 공 생성
 
             Block.InitAll(this);
             xbar = new Bar(this, new Point(100, 600));
@@ -63,36 +64,6 @@ namespace Block_Break_Game.First
         {
 
             Ball.AllTick();
-            int num = 2;
-
-
-            //foreach (Block p in Block.BlockList)
-            //{
-            //    foreach (Ball k in Ball.BallList)
-            //    {
-            //       num = k.BlockCollision(p);
-
-            //        if(num == 1)
-            //        {
-            //            if (p.sight[0] == false)
-            //            {
-            //                num = 2;
-            //                k.Move(num);
-            //            }
-            //            foreach (Ball l in Ball.BallList)
-            //            {
-            //                l.Move(num);
-            //                p.sight[0] = false;
-            //            }
-            //        }
-
-            //    }
-            //}// ball 충돌과 관련
-
-            //foreach (Ball k in Ball.BallList)
-            //{
-            //    k.Move(num);
-            //}// ball 공의 움직임
 
             foreach ( Block p in Block.BlockList)
             {
@@ -104,6 +75,23 @@ namespace Block_Break_Game.First
                     }
                 }
             } //block 충돌 및 제거
+
+            int num2 = 2;
+            foreach (Ball k in Ball.BallList)
+            {
+                double positionx1 = k.loc.X - k.xspeed;
+                double positiony1 = k.loc.Y - k.yspeed;
+                double positionx2 = k.loc.X;
+                double positiony2 = k.loc.Y;
+                num2 = k.BarCollision(xbar);
+
+                if (num2 == 1)
+                {
+                 k.BallMove(num2, positionx1, positionx2, positiony1, positiony2,
+                            xbar.loc.X, xbar.loc.Y, xbar.loc.X + xbar.Width, xbar.loc.Y + xbar.Height);
+                }
+
+            }// bar 충돌과 관련
         }//시간에 따른 움직임 제어
 
         public void AddBall()

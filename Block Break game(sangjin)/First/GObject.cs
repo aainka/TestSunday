@@ -35,6 +35,8 @@ namespace Block_Break_Game
                 Canvas.SetTop(block, value.Y);
             }
         }
+
+
         public Double Width
         {
             get

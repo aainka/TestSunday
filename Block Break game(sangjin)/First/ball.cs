@@ -16,8 +16,9 @@ namespace Block_Break_Game.First
     public class Ball : GObject
     {
         public static List<Ball> BallList = new List<Ball>();
-        int xspeed = 0;
-        int yspeed = -10;
+
+        public int xspeed = 2;
+        public int yspeed = -3;
 
         public Ball(Ground ground, Point ploc, int index): base(ground)
         {
@@ -27,22 +28,14 @@ namespace Block_Break_Game.First
             block.Fill = Brushes.Blue;
         }
 
-        public void tick()
-        {
-            // one step move
-            loc = new Point(loc.X + xspeed, loc.Y + yspeed);
-
-            // check bound
-        }
-
-        public void Move99(int num)
+        public void BallMove(int num,
+            double a , double b , double c, double d,
+            double e , double f , double g ,double h)
         {
             switch (num)
             {
                 case 1:
-                    yspeed = -yspeed;
-                    xspeed = -xspeed;
-                    loc = new Point(loc.Y + yspeed, loc.X + xspeed);
+                    graph(a, b, c, d, e, f, g, h);
                     break;
 
                 case 2:
@@ -52,65 +45,184 @@ namespace Block_Break_Game.First
         }
         public void  WallMove()
         {
-            if (loc.Y < 0 || loc.Y > 415)
+            if (loc.X < 0 || loc.X > 415)
             {
-                if (loc.X < 0 || loc.X > 700)
+                if (loc.Y < 0 || loc.Y > 700)
                 {
-                    yspeed = -yspeed;
                     xspeed = -xspeed;
-                    loc = new Point(loc.Y + yspeed, loc.X + xspeed);
+                    yspeed = -yspeed;
+
+                    loc = new Point(loc.X + xspeed, loc.Y + yspeed);
                 }
                 else
                 {
-                    yspeed = -yspeed;
-                    loc = new Point(loc.Y + yspeed, loc.X + xspeed);
+                    xspeed = -xspeed;
+                    loc = new Point(loc.X + xspeed, loc.Y + yspeed);
                 }
             }
             
-            if (loc.X < 0 || loc.X > 700)
+            if (loc.Y < 0 || loc.Y > 700)
             {
-                if (loc.Y < 0 || loc.Y > 415)
+                if (loc.X < 0 || loc.X > 415)
                 {
                     xspeed = -xspeed;
                     yspeed = -yspeed;
-                    loc = new Point(loc.Y + yspeed, loc.X + xspeed);
+                    loc = new Point(loc.X + xspeed, loc.Y + yspeed);
 
                 }
 
                 else
                 {
-                    xspeed = -xspeed;
-                    loc = new Point(loc.Y + yspeed, loc.X + xspeed);
+                    yspeed = -yspeed;
+                    loc = new Point(loc.X + xspeed, loc.Y + yspeed);
                 }
             }
             
-            if(loc.Y >= 0 && loc.Y <= 415 && loc.X >= 0 && loc.X <= 700)
+            if(loc.X >= 0 && loc.X <= 415 && loc.Y >= 0 && loc.Y <= 700)
             {
-                loc = new Point(loc.Y + yspeed, loc.X + xspeed);
+                loc = new Point(loc.X + xspeed, loc.Y + yspeed);
             }
 
         }
 
-      
-
-        public int BlockCollision(Block p)
+        public int BlockCollision(Block p )
         {
-            if (loc.Y >= p.loc.Y && loc.Y <= p.loc.Y + 14)
+            if (loc.Y + Height/2  >= p.loc.Y  && loc.Y + Height / 2 <= p.loc.Y + p.Height )
             {
-                if(loc.X >= p.loc.X && loc.X <= p.loc.X + 29)
+                if(loc.X + Width/2 >= p.loc.X && loc.X + Width / 2 <= p.loc.X + p.Width  )
                 {
                     return 1;
                 }
             }
             return 2;
-        } //충돌 지점이 꼭짓점이면 문제가 발생
+        } 
+
+        public int BarCollision(Bar p)
+        {
+            if (loc.Y + Height / 2 >= p.loc.Y && loc.Y + Height / 2 <= p.loc.Y + p.Height)
+            {
+                if (loc.X + Width / 2 >= p.loc.X && loc.X + Width / 2 <= p.loc.X + p.Width)
+                {
+                    return 1;
+                }
+            }
+            return 2;
+        }
 
         internal static void AllTick()
         {
-             foreach( Ball ball in BallList )
+            
+            int num = 2;
+
+            foreach (Ball k in Ball.BallList)
             {
-                ball.tick();
+                double positionx1 = k.loc.X - k.xspeed;
+                double positiony1 = k.loc.Y - k.yspeed;
+                double positionx2 = k.loc.X;
+                double positiony2 = k.loc.Y;
+                    foreach (Block p in Block.BlockList)
+                    {
+                        num = k.BlockCollision(p);
+
+                        if (num == 1)
+                        {
+                            if (p.sight[0] == false)
+                            {
+                                num = 2;
+                                k.BallMove(num, positionx1, positionx2, positiony1, positiony2,
+                                    p.loc.X, p.loc.Y, p.loc.X + p.Width, p.loc.Y + p.Height);
+                            }
+                            else
+                            {
+                                k.BallMove(num, positionx1, positionx2, positiony1, positiony2,
+                                    p.loc.X, p.loc.Y, p.loc.X + p.Width, p.loc.Y + p.Height);
+                                p.sight[0] = false;
+                            }
+                        }
+
+                    }
+            }// ball 충돌과 관련
+
+            foreach (Ball k in Ball.BallList)
+            {
+                k.BallMove(num , 0, 0 ,0 ,0, 0, 0 ,0 ,0);
             }
+
+        }
+
+        public void graph(double positionx1, double positionx2, double positony1, double positony2,
+            double blockposx1, double blockposy1, double blockposx2, double blockposy2)
+        {
+            double xslope = (positony1- positony2) /(positionx1-positionx2);//y =ax+b =>y - ax = b
+            double yslope = 1/xslope;//x = ay + b => x - ay = b
+            double xconstant = positony1 - xslope * positionx1;
+            double yconstant = positionx1 - yslope * positony1;
+
+            //posX2 - PosX1 > 0 => ->
+            //posX2 - PosX1 < 0 => <-
+            //posY2 - PosY1 > 0 => 아래 진행
+            //posY2 - PosY1 < 0 => 위로 진행
+            if (positionx1 - positionx2 == 0) 
+            {
+                yspeed = -yspeed;
+            }// 일직선으로 날라갈 때
+
+            if (positionx2-positionx1 > 0 && positony2 - positony1 > 0) 
+            {
+                if (xslope*blockposx1 + xconstant > blockposy2 && xslope * blockposx1 + xconstant < blockposy1)
+                {
+                    xspeed = -xspeed;
+                    //loc = new Point(blockposx1, xslope * blockposx1 + xconstant);                    
+                }
+                if (yslope*blockposy1 + yconstant > blockposx1 && yslope * blockposy1 + yconstant < blockposx2)
+                {
+                    yspeed = -yspeed;
+                    //loc = new Point(yslope*blockposy1 + yconstant, blockposy1);  
+                }
+            }//-> 아래
+
+            if(positionx2-positionx1 > 0 && positony2 -positony1 < 0)
+            {
+                if (xslope * blockposx1 + xconstant > blockposy2 && xslope * blockposx1 + xconstant < blockposy1)
+                {
+                    xspeed = -xspeed;
+                    //loc = new Point(blockposx1, xslope * blockposx1 + xconstant);                    
+                }
+                if (yslope * blockposy2 + yconstant > blockposx1 && yslope * blockposy2 + yconstant < blockposx2)
+                {
+                    yspeed = -yspeed;
+                    //loc = new Point(yslope*blockposy2 + yconstant, blockposy2);  
+                }
+            }//->위
+
+            if (positionx2 - positionx1 < 0 && positony2 - positony1 > 0)
+            {
+                if (xslope * blockposx2 + xconstant > blockposy2 && xslope * blockposx2 + xconstant < blockposy1)
+                {
+                    xspeed = -xspeed;
+                    //loc = new Point(blockposx2, xslope * blockposx2 + xconstant);                    
+                }
+                if (yslope * blockposy1 + yconstant > blockposx1 && yslope * blockposy1 + yconstant < blockposx2)
+                {
+                    yspeed = -yspeed;
+                    //loc = new Point(yslope*blockposy1 + yconstant, blockposy1);  
+                }
+            }//<-아래
+
+            if (positionx2 - positionx1 < 0 && positony2 - positony1 < 0)
+            {
+                if (xslope * blockposx2 + xconstant > blockposy2 && xslope * blockposx2 + xconstant < blockposy1)
+                {
+                    xspeed = -xspeed;
+                    //loc = new Point(blockposx2, xslope * blockposx2 + xconstant);                    
+                }
+                if (yslope * blockposy2 + yconstant > blockposx1 && yslope * blockposy2 + yconstant < blockposx2)
+                {
+                    yspeed = -yspeed;
+                    //loc = new Point(yslope*blockposy2 + yconstant, blockposy2);  
+                }
+            }//<-위
+
         }
     }
 }
